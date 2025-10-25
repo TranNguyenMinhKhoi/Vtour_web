@@ -25,7 +25,7 @@ const OTPRegister: React.FC<OTPRegisterProps> = ({ initialEmail }) => {
 
   // ưu tiên email được truyền từ props (Register component), nếu không có thì dùng từ location.state
   const [email, setEmail] = useState(initialEmail ?? initialEmailFromLocation);
-  const [otpCode, setOtpCode] = useState("");
+  const [otp, setOtp] = useState("");
 
   const { mutate: verifyOtp, isPending } = useOTPVerify();
 
@@ -40,7 +40,7 @@ const OTPRegister: React.FC<OTPRegisterProps> = ({ initialEmail }) => {
   }, [initialEmail]);
 
   const handleVerify = () => {
-    if (!email || !otpCode) {
+    if (!email || !otp) {
       setDialogMsg("Vui lòng điền email và OTP.");
       setIsSuccess(false);
       setDialogOpen(true);
@@ -48,7 +48,7 @@ const OTPRegister: React.FC<OTPRegisterProps> = ({ initialEmail }) => {
     }
 
     verifyOtp(
-      { email, otpCode },
+      { email, otp },
       {
         onSuccess: (res: any) => {
           const message =
@@ -99,8 +99,8 @@ const OTPRegister: React.FC<OTPRegisterProps> = ({ initialEmail }) => {
 
         <TextField
           label="Nhập OTP"
-          value={otpCode}
-          onChange={(e) => setOtpCode(e.target.value)}
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
           fullWidth
         />
 

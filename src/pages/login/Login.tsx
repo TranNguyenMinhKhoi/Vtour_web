@@ -85,7 +85,7 @@ const Login: React.FC<LoginProps> = ({ dialogMode = false, onClose }) => {
     }
 
     verifyOtp(
-      { email, otpCode: otp },
+      { email, otp },
       {
         onSuccess: async (res: any) => {
           const token = res?.data?.token || res?.token;
