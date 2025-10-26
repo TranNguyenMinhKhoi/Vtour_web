@@ -126,7 +126,7 @@ const RoutesResults: React.FC<Props> = ({
 
           return (
             <React.Fragment key={key}>
-              <Grid size={{xs: 12, md: 6}}>
+              <Grid size={{xs: 12, md: 12}}>
                 <Card sx={{ borderRadius: 4, overflow: "hidden", backgroundColor: "#fff" }}>
                   <div
                     onClick={() => {

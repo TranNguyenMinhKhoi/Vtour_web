@@ -143,20 +143,6 @@ const TicketCardForm: React.FC<TicketCardFormProps> = ({
             Điểm đón & Trả khách
           </Typography>
         </Box>
-
-        {/* <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={(e) => {
-              e.stopPropagation(); // ngăn click cha toggle panel
-              if (onBook) onBook();
-            }}
-            sx={{ borderRadius: 5 }}
-          >
-            ĐẶT VÉ
-          </Button>
-        </Box> */}
       </Box>
     </Box>
   );

@@ -4,7 +4,7 @@ import axiosClient from "../utils/axiosClient";
 export const bookingAPI = {
   createBooking(createBookingDto: CreateBookingDto) {
     return axiosClient
-      .post("/api/booking", createBookingDto, {
+      .post("/api/bookings", createBookingDto, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

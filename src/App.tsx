@@ -20,7 +20,7 @@ import MainAdminAccount from './pages/AdminAccount/MainAdminAccount'
 import MainAdminTours from './pages/AdminTours/MainAdminTours'
 import Profile from './pages/profile/Profile'
 import RoutesPage from './pages/routes/RoutesPage'
-//
+import Payment from './pages/payments/Payment'
 
 
 function App() {
@@ -49,6 +49,7 @@ function App() {
         <Route path="/AdminAccount" element={<MainLayout><MainAdminAccount/></MainLayout>} />
         <Route path="/AdminTours" element={<MainLayout><MainAdminTours/></MainLayout>} />
         <Route path="/profile" element={<MainLayout><Profile/></MainLayout>} />
+        <Route path="/payments" element={<MainLayout><Payment/></MainLayout>} />
       </Routes>
     </BrowserRouter>
   )
