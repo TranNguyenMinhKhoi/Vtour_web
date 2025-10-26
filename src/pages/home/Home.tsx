@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     setLoadingCities(true);
     axios
       // .get("http://localhost:5000/api/stations/cities")
-      .get("https://bus-ticket-be-dun.vercel.app/cities")
+      .get("https://bus-ticket-be-dun.vercel.app/api/stations/cities")
       .then((res) => {
         if (cancelled) return;
         if (res.data?.cities) setCities(res.data.cities);
