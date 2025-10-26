@@ -17,7 +17,7 @@ interface Props {
 }
 
 // const API_BASE = "http://localhost:5000";
-const API_BASE = "https://bus-ticket-be-dun.vercel.app/";
+const API_BASE = "https://bus-ticket-be-dun.vercel.app";
 
 
 const RoutesResults: React.FC<Props> = ({

@@ -62,7 +62,7 @@ const axiosClient = axios.create({
   // baseURL: "https://vtour-be.onrender.com/",
   // baseURL: "https://lq63h7zp-5000.asse.devtunnels.ms",
   // baseURL: "http://localhost:5000",
-  baseURL: "https://bus-ticket-be-dun.vercel.app/",
+  baseURL: "https://bus-ticket-be-dun.vercel.app",
   // baseURL: process.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
