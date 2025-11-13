@@ -6,8 +6,8 @@ import BusLayout from "./booking/BusLayout";
 import StationSelector from "./booking/StationSelector";
 import BookingConfirmTab from "./booking/BookingConfirmTab";
 
-const API_BASE = "http://localhost:5000";
-// const API_BASE = "https://bus-ticket-be-dun.vercel.app";
+// const API_BASE = "http://localhost:5000";
+const API_BASE = "https://bus-ticket-be-dun.vercel.app";
 
 const SeatMap: React.FC<SeatMapProps> = ({
   seatMap,
