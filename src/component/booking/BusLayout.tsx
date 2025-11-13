@@ -108,9 +108,9 @@ const BusLayout: React.FC<BusLayoutProps> = ({
   const bottomRow3 = getSeatsByRange(17, 24);
 
   // Tầng trên (23–45)
-  const topRow1 = getSeatsByRange(23, 30);
-  const topRow2 = getSeatsByRange(31, 38);
-  const topRow3 = getSeatsByRange(39, 46);
+  const topRow1 = getSeatsByRange(25, 32);
+  const topRow2 = getSeatsByRange(33, 40);
+  const topRow3 = getSeatsByRange(41, 48);
 
   return (
     <Box
