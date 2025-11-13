@@ -111,7 +111,8 @@ const Login: React.FC<LoginProps> = ({ dialogMode = false, onClose }) => {
             }
 
             // Navigate về home
-            navigate("/home");
+            // navigate("/home");
+            window.location.href = "/home";
           } else {
             setError("Không nhận được token từ server.");
           }

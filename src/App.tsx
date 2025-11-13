@@ -21,12 +21,15 @@ import MainAdminTours from './pages/AdminTours/MainAdminTours'
 import Profile from './pages/profile/Profile'
 import RoutesPage from './pages/routes/RoutesPage'
 import Payment from './pages/payments/Payment'
+import Us from './pages/us/Us'
+import {GlobalLoadingProvider} from './context/GlobalLoadingContext'
 
 
 function App() {
 
   return (
     <BrowserRouter>
+    <GlobalLoadingProvider>
       <Routes>
       <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/login" element={<Login />} />
@@ -50,7 +53,9 @@ function App() {
         <Route path="/AdminTours" element={<MainLayout><MainAdminTours/></MainLayout>} />
         <Route path="/profile" element={<MainLayout><Profile/></MainLayout>} />
         <Route path="/payments" element={<MainLayout><Payment/></MainLayout>} />
+        <Route path="/us" element={<MainLayout><Us/></MainLayout>} />
       </Routes>
+    </GlobalLoadingProvider>
     </BrowserRouter>
   )
 }

@@ -93,12 +93,14 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     handleMenuClose();
     logout(undefined, {
       onSuccess: () => {
-        navigate("/home");
+        // navigate("/home");
+        window.location.href = "/home";
       },
       onError: (error: any) => {
         console.error("Logout error:", error);
         localStorage.removeItem("token");
-        navigate("/home");
+        // navigate("/home");
+        window.location.href = "/home";
       },
     });
   };
@@ -184,7 +186,7 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
 
         {/* Right actions */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-          {/* price language */}
+          {/* price language
           <Typography
             variant="body2"
             sx={{
@@ -193,7 +195,7 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
             }}
           >
             15.000 VND | VI
-          </Typography>
+          </Typography> */}
 
           {/* Menu buttons */}
           {menuItems.map((item) => (

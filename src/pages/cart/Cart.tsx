@@ -37,7 +37,7 @@ const Cart = () => {
 
         <Button
           component={Link}
-          to="/tours"
+          to="/home"
           sx={{
             bgcolor: "blueviolet",
             color: "white",
