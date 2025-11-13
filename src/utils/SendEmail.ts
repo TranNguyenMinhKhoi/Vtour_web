@@ -6,7 +6,7 @@ export async function sendOtp(email: string) {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: "re_6aGPJqFK_2SRb8XeAHBcmE81K8phasHhE", // ⚠️ thay bằng key thật của bạn
+        Authorization: "re_6aGPJqFK_2SRb8XeAHBcmE81K8phasHhE", 
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
