@@ -1,9 +1,35 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { useCancelBooking } from "../../hook/booking/useCancelBooking";
 
 const TicketCanellation = () => {
   const [ticketId, setTicketId] = useState("");
   const [email, setEmail] = useState("");
+
+  const { mutate: cancelBooking, isPending } = useCancelBooking();
+
+  const handleCancel = () => {
+    if (!ticketId || !email) {
+      alert("Vui lòng nhập đầy đủ thông tin");
+      return;
+    }
+
+    cancelBooking(
+      { bookingId: ticketId, email },
+      {
+        onSuccess: (data) => {
+          alert(
+            `Hủy vé thành công! Mã booking: ${data.booking.bookingReference}`
+          );
+          setTicketId("");
+          setEmail("");
+        },
+        onError: (error: any) => {
+          alert(error?.response?.data?.message || "Hủy vé thất bại");
+        },
+      }
+    );
+  };
 
   return (
     <Box>
@@ -72,11 +98,14 @@ const TicketCanellation = () => {
 
           <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
             <Button
+              onClick={handleCancel}
+              disabled={isPending}
               variant="contained"
               color="secondary"
               sx={{ fontWeight: "bold", px: 4 }}
             >
-              Chọn hành khách để hủy
+              {/* Chọn hành khách để hủy */}
+              {isPending ? "Đang xử lý..." : "Hủy vé"}
             </Button>
           </Box>
         </Box>

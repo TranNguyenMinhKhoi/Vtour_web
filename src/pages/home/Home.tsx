@@ -83,7 +83,6 @@ const Home: React.FC = () => {
           <BookingForm locations={cities} onSubmit={handleSearch} />
         )}
 
-        {/* NOTE: Không còn hiển thị list kết quả ở Home nữa - RoutesPage sẽ đảm nhiệm */}
       </Box>
 
       <Box
