@@ -1,5 +1,9 @@
-import type {CancelBookingDto, CancelBookingResponse} from "../dto/booking/cancel-booking.dto";
+import type {
+  CancelBookingDto,
+  CancelBookingResponse,
+} from "../dto/booking/cancel-booking.dto";
 import type { CreateBookingDto } from "../dto/booking/create-booking.dto";
+import type { MyBookingsResponse } from "../dto/booking/my-booking.dto";
 import axiosClient from "../utils/axiosClient";
 
 export const bookingAPI = {
@@ -13,9 +17,21 @@ export const bookingAPI = {
       .then((res) => res.data);
   },
 
-  cancelBooking(cancelBookingDto: CancelBookingDto): Promise<CancelBookingResponse> {
+  cancelBooking(
+    cancelBookingDto: CancelBookingDto
+  ): Promise<CancelBookingResponse> {
     return axiosClient
       .patch("/api/bookings/cancel-by-reference", cancelBookingDto)
+      .then((res) => res.data);
+  },
+
+  getMyBookings(): Promise<MyBookingsResponse> {
+    return axiosClient
+      .get("/api/bookings/my-bookings", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) => res.data);
   },
 };

@@ -131,7 +131,8 @@ const Payment: React.FC = () => {
       alert(
         "✅ Đặt vé thành công! Email xác nhận đã được gửi đến địa chỉ liên hệ."
       );
-      navigate("/");
+      // navigate("/booking");
+      window.location.href = "/booking"
     } catch (err: any) {
       console.error("❌ Booking error:", err);
       alert(err?.message || "Không thể tạo đặt vé. Vui lòng thử lại sau.");
