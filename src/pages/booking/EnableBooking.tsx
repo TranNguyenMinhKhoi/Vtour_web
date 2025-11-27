@@ -255,6 +255,7 @@ const EnableBooking = () => {
           );
         })}
       </Grid>
+      
 
       <Dialog open={openConfirm} onClose={handleCloseCancel}>
         <DialogTitle>Xác nhận hủy vé</DialogTitle>
