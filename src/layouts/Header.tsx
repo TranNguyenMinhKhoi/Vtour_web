@@ -32,7 +32,7 @@ type HeaderProps = {
 const menuItems = [
   { label: "Hủy vé", path: "/cancellation" },
   { label: "Đặt chỗ của tôi", path: "/booking" },
-  { label: "Giỏ hàng", path: "/cart", icon: <ShoppingCartIcon /> },
+  // { label: "Giỏ hàng", path: "/cart", icon: <ShoppingCartIcon /> },
 ];
 
 const Header: React.FC<HeaderProps> = ({ scrolled }) => {
@@ -207,8 +207,8 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
               sx={{
                 color: scrolled ? "rgba(0,0,0,0.7)" : "white",
                 borderRadius: 2,
-                px: item.icon ? 1 : 2,
-                minWidth: item.icon ? 40 : undefined,
+                // px: item.icon ? 1 : 2,
+                // minWidth: item.icon ? 40 : undefined,
                 "&.active": {
                   backgroundColor: "rgba(137, 43, 226, 0.62)",
                   color: "white",
@@ -220,7 +220,7 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
                 transition: "all 0.3s ease",
               }}
             >
-              {item.icon ? item.icon : item.label}
+              {item.label}
             </Button>
           ))}
 
