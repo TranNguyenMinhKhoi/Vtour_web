@@ -5,8 +5,6 @@ import {
   Box,
   Typography,
   Button,
-  Dialog,
-  DialogContent,
   Menu,
   MenuItem,
   IconButton,
@@ -21,9 +19,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
-import Login from "../pages/login/Login";
 import { useLoginInfo } from "../hook/auth/useLoginInfo";
 import { useLogOut } from "../hook/auth/useLogOut";
+import {useLoginDialog} from "../context/LoginDialogContext";
 
 type HeaderProps = {
   scrolled: boolean;
@@ -51,7 +49,8 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
   const { mutate: logout, isPending: isLoggingOut } = useLogOut();
 
   // local state dialog/menu
-  const [openLogin, setOpenLogin] = useState(false);
+  // const [openLogin, setOpenLogin] = useState(false);
+  const { openLoginDialog } = useLoginDialog()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   // Refetch user info khi có token mới
@@ -64,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
   // Nếu server trả về user (loginData) thì đóng dialog login tự động
   useEffect(() => {
     if (loginData) {
-      setOpenLogin(false);
+      // setOpenLogin(false);
       setAnchorEl(null);
     }
   }, [loginData]);
@@ -113,7 +112,8 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     handleMenuClose();
 
     if (action === "login") {
-      setOpenLogin(true);
+      // setOpenLogin(true);
+      openLoginDialog();
       return;
     }
     if (action === "profile") {
@@ -329,9 +329,10 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
           </Menu>
         </Box>
       </Toolbar>
+      
 
       {/* Dialog Login */}
-      <Dialog
+      {/* <Dialog
         open={openLogin}
         onClose={() => setOpenLogin(false)}
         fullWidth
@@ -340,7 +341,7 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
         <DialogContent sx={{ p: 0 }}>
           <Login dialogMode onClose={() => setOpenLogin(false)} />
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </AppBar>
   );
 };

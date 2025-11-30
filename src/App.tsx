@@ -23,6 +23,7 @@ import RoutesPage from './pages/routes/RoutesPage'
 import Payment from './pages/payments/Payment'
 import Us from './pages/us/Us'
 import {GlobalLoadingProvider} from './context/GlobalLoadingContext'
+import {LoginDialogProvider} from './context/LoginDialogContext'
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
   return (
     <BrowserRouter>
     <GlobalLoadingProvider>
+      <LoginDialogProvider>
       <Routes>
       <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/login" element={<Login />} />
@@ -55,6 +57,7 @@ function App() {
         <Route path="/payments" element={<MainLayout><Payment/></MainLayout>} />
         <Route path="/us" element={<MainLayout><Us/></MainLayout>} />
       </Routes>
+      </LoginDialogProvider>
     </GlobalLoadingProvider>
     </BrowserRouter>
   )

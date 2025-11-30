@@ -18,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import type { BookingData } from "./types";
+import { useLoginInfo } from "../../hook/auth/useLoginInfo"; // ⭐ Import
+import { useLoginDialog } from "../../context/LoginDialogContext"; // ⭐ Import
 
 dayjs.extend(utc);
 
@@ -49,6 +51,15 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
 }) => {
   const navigate = useNavigate();
   
+  // ⭐ Check login status
+  const token = localStorage.getItem("token");
+  const hasToken = Boolean(token);
+  const { data: loginData } = useLoginInfo({ enabled: hasToken });
+  const isLoggedIn = Boolean(loginData && hasToken);
+  
+  // ⭐ Login dialog context
+  const { openLoginDialog } = useLoginDialog();
+  
   const {
     departureCity,
     arrivalCity,
@@ -68,10 +79,12 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
     : String(selectedSeats);
 
   const [openPassengerDialog, setOpenPassengerDialog] = useState(false);
+  const [openLoginWarning, setOpenLoginWarning] = useState(false); // ⭐ Dialog cảnh báo
   const [seatNumbers, setSeatNumbers] = useState<string[]>([]);
   const [passengerNames, setPassengerNames] = useState<string[]>([]);
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [pendingPaymentData, setPendingPaymentData] = useState<any>(null); // ⭐ Lưu data tạm
 
   useEffect(() => {
     const seatsArr: string[] = Array.isArray(selectedSeats)
@@ -86,6 +99,17 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
       return seatsArr.map(() => "");
     });
   }, [selectedSeats]);
+
+  // ⭐ Theo dõi khi user login xong
+  useEffect(() => {
+    // Nếu user vừa login và có pending data → tự động chuyển sang payment
+    if (isLoggedIn && pendingPaymentData) {
+      console.log("✅ User logged in, proceeding to payment...");
+      navigate("/payments", { state: { bookingData: pendingPaymentData } });
+      setPendingPaymentData(null); // Clear pending data
+      setOpenPassengerDialog(false);
+    }
+  }, [isLoggedIn, pendingPaymentData, navigate]);
 
   const handleOpenPassengerDialog = () => {
     setOpenPassengerDialog(true);
@@ -134,7 +158,7 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
       return;
     }
 
-    // Navigate to payment page with all booking data + passenger info
+    // Prepare payment data
     const paymentData = {
       ...bookingData,
       passengerNames,
@@ -142,8 +166,29 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
       phone,
     };
 
+    // ⭐ Kiểm tra đăng nhập
+    if (!isLoggedIn) {
+      // Lưu data tạm và hiển thị cảnh báo
+      setPendingPaymentData(paymentData);
+      setOpenLoginWarning(true);
+      return;
+    }
+
+    // Đã đăng nhập → Chuyển sang payment bình thường
     navigate("/payments", { state: { bookingData: paymentData } });
     setOpenPassengerDialog(false);
+  };
+
+  // ⭐ Handler đóng dialog cảnh báo
+  const handleCloseLoginWarning = () => {
+    setOpenLoginWarning(false);
+  };
+
+  // ⭐ Handler mở login dialog
+  const handleOpenLogin = () => {
+    setOpenLoginWarning(false); // Đóng cảnh báo
+    openLoginDialog({ skipRedirect: true }); // Mở login dialog
+    // Không đóng passenger dialog để giữ nguyên data
   };
 
   return (
@@ -448,6 +493,35 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
               Tiếp tục
             </Button>
           </Box>
+        </DialogActions>
+      </Dialog>
+
+      {/* ⭐ Login Warning Dialog */}
+      <Dialog open={openLoginWarning} onClose={handleCloseLoginWarning}>
+        <DialogTitle>Yêu cầu đăng nhập</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Hãy tiến hành <strong>Đăng nhập/Đăng ký</strong> để tiếp tục thao tác!
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+            💡 Thông tin đặt vé của bạn sẽ được lưu lại
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLoginWarning} sx={{ textTransform: "none" }}>
+            Hủy
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleOpenLogin}
+            sx={{
+              textTransform: "none",
+              bgcolor: "blueviolet",
+              "&:hover": { bgcolor: "blueviolet", opacity: 0.9 },
+            }}
+          >
+            Đăng nhập/Đăng ký
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

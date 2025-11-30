@@ -4,15 +4,17 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import { useLoginInfo } from "../../hook/auth/useLoginInfo";
 import { useMyBookings } from "../../hook/booking/useMyBooking";
-import { useCancelBooking } from "../../hook/booking/useCancelBooking"; // ⭐ Import hook
+import { useCancelBooking } from "../../hook/booking/useCancelBooking";
+import {useLoginDialog} from "../../context/LoginDialogContext";
 
 const EnableBooking = () => {
   const token = localStorage.getItem("token");
   const hasToken = Boolean(token);
   
+  const { openLoginDialog } = useLoginDialog();
   const { data: loginData } = useLoginInfo({ enabled: hasToken });
   const { data: bookingsData, isLoading, error, refetch } = useMyBookings(hasToken);
-  const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking(); // ⭐ Hook cancel
+  const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
 
   const isLoggedIn = Boolean(loginData && hasToken);
   const bookings = bookingsData?.bookings || [];
@@ -34,9 +36,10 @@ const EnableBooking = () => {
           <Typography variant="h4" color="black">
             Vui lòng đăng nhập để xem đặt chỗ
           </Typography>
+          
           <Button
-            component={Link}
-            to="/home"
+            // onClick={openLoginDialog}
+            onClick={() => openLoginDialog()}
             sx={{
               bgcolor: "blueviolet",
               color: "white",
@@ -45,13 +48,12 @@ const EnableBooking = () => {
               "&:hover": { transform: "scale(1.05)", color: "white" },
             }}
           >
-            Về trang chủ
+            Đăng nhập/Đăng ký
           </Button>
         </Box>
       </Box>
     );
   }
-
   // Đang load
   if (isLoading) {
     return (
