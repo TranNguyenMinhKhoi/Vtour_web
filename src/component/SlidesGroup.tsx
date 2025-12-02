@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, CardMedia, CardContent, Typography } from "@mui/material";
 import Slides from "./Slides";
-import { topVenues, topSales, topAbroad, topNews } from "../data/MockData";
+import { topSales, topAbroad } from "../data/MockData";
 
 
 const SlidesGroup: React.FC = () => {
