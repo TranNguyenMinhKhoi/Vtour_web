@@ -99,7 +99,8 @@ const News = () => {
           mt: 5,
         }}
       >
-        <Slides title="Top tin tức " data={topNews} />
+        {/* <Slides title="Top tin tức " data={topNews} /> */}
+        
       </Box>
     </Box>
   );

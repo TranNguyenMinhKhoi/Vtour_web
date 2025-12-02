@@ -8,6 +8,8 @@ import SlidesGroup from "../../component/SlidesGroup";
 import BookingForm from "../../component/BookingForm";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import SlideTopVenue from "../../component/SlideTopVenue";
+import SlideNews from "../../component/SlideNews";
 
 const Home: React.FC = () => {
   const [cities, setCities] = useState<string[]>([]);
@@ -85,7 +87,7 @@ const Home: React.FC = () => {
 
       </Box>
 
-      <Box
+      {/* <Box
         sx={{
           backgroundImage: "url('/pur_sakura.png')",
           borderRadius: 2,
@@ -99,8 +101,10 @@ const Home: React.FC = () => {
             Ưu đãi xuống đến 0%
           </Typography>
         </Box>
-      </Box>
+      </Box> */}
+      <SlideTopVenue/>
       <SlidesGroup />
+      <SlideNews/>
     </Box>
   );
 };

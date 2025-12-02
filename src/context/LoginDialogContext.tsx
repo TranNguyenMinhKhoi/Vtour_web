@@ -3,9 +3,9 @@ import { Dialog, DialogContent } from "@mui/material";
 import Login from "../pages/login/Login";
 
 interface LoginDialogContextType {
-  openLoginDialog: (options?: { skipRedirect?: boolean }) => void; // ⭐ Thêm options
+  openLoginDialog: (options?: { skipRedirect?: boolean }) => void;
   closeLoginDialog: () => void;
-  isInBookingFlow: boolean; // ⭐ Flag để check
+  isInBookingFlow: boolean; 
 }
 
 const LoginDialogContext = createContext<LoginDialogContextType | undefined>(undefined);

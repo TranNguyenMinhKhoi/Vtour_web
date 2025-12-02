@@ -7,12 +7,12 @@ import { topVenues, topSales, topAbroad, topNews } from "../data/MockData";
 const SlidesGroup: React.FC = () => {
   // cấu hình các section: title, data, itemWidth, (tùy chọn) renderItem
   const sections = [
-    {
-      key: "venues",
-      title: "Top địa điểm hút khách",
-      data: topVenues,
-      itemWidth: 300,
-    },
+    // {
+    //   key: "venues",
+    //   title: "Top địa điểm hút khách",
+    //   data: topVenues,
+    //   itemWidth: 300,
+    // },
     {
       key: "sales",
       title: "Khuyến mãi hot",
@@ -48,12 +48,12 @@ const SlidesGroup: React.FC = () => {
       data: topAbroad,
       itemWidth: 300,
     },
-    {
-      key: "news",
-      title: "Top tin tức!!!",
-      data: topNews,
-      itemWidth: 300,
-    },
+    // {
+    //   key: "news",
+    //   title: "Top tin tức!!!",
+    //   data: topNews,
+    //   itemWidth: 300,
+    // },
   ];
 
   return (

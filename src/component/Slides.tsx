@@ -169,7 +169,7 @@ const Slides = <T,>({
             backgroundColor: "background.paper",
             boxShadow: 2,
             "&:hover": { backgroundColor: "grey.100" },
-            display: { xs: "none", sm: "flex" }, // ẩn trên quá nhỏ nếu muốn
+            display: { xs: "none", sm: "flex" },
           }}
         >
           <ArrowForwardIosIcon fontSize="small" />
