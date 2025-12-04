@@ -353,21 +353,6 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
             {totalPrice ?? "150.000 đ"}
           </Typography>
         </Box>
-
-        <Box sx={{ textAlign: "right", mt: 1 }}>
-          <Typography
-            variant="body2"
-            sx={{
-              cursor: "pointer",
-              color: "primary.main",
-              fontWeight: 600,
-              textDecoration: "underline",
-            }}
-            onClick={() => alert("Hiện chi tiết giá vé (placeholder).")}
-          >
-            Hiện chi tiết giá vé
-          </Typography>
-        </Box>
       </Box>
 
       {/* Book Button */}

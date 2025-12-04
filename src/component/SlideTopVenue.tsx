@@ -47,7 +47,7 @@ const SlideTopVenue: React.FC = () => {
 
   const fetchDestinations = async () => {
     try {
-    //   const response = await fetch('http://localhost:5000/api/routes');
+      // const response = await fetch('http://localhost:5000/api/routes');
       const response = await fetch('https://bus-ticket-be-dun.vercel.app/api/routes');
       const data = await response.json();
       

@@ -32,7 +32,8 @@ export type BusCompanies = {
   id: string;
   name: string;
   code?: string;
-  address?: string;
+  description?: string;
+  url: string;
   img: string;
 };
 
@@ -208,64 +209,30 @@ export const mockLocations = [
 //Stations
 export const buscompanies: BusCompanies[] = [
   {
-    id: "banh-thuoi",
-    name: "Bành Thưởi",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
+    id: "thanh-buoi",
+    name: "Thành Bưởi",
+    img: "https://thuexedulichnhatrang.vn/Media/Articles/170419113032/Gallery/xe_thanh_buoi.jpg?width=800&height=600&quality=80&mode=crop",
+    url: "https://thanhbuoi.com.vn/",
   },
   {
-    id: "phang-truong",
-    name: "Phang Trương",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
+    id: "phuong-trang",
+    name: "Phương Trang",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsM9tWv0skH1wZ9S6ZcI4lPRAF1I-N2E5bRA&s",
+    url: "https://www.facebook.com/xephuongtrang/?locale=vi_VN",
   },
   {
-    id: "ha-noi",
-    name: "Hà Nội",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
+    id: "hoang-long",
+    name: "Hoàng Long",
+    img: "https://hoanglongasia.com/Images/og-img-update.png",
+    url: "https://xekhachhoanglong.com/",
+
   },
   {
-    id: "sai-gon",
-    name: "Sài Gòn",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "banh-thuoi",
-    name: "Bành Thưởi",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "phang-truong",
-    name: "Phang Trương",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "ha-noi",
-    name: "Hà Nội",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "sai-gon",
-    name: "Sài Gòn",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "banh-thuoi",
-    name: "Bành Thưởi",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "phang-truong",
-    name: "Phang Trương",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "ha-noi",
-    name: "Hà Nội",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
-  },
-  {
-    id: "sai-gon",
-    name: "Sài Gòn",
-    img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
+    id: "mai-linh",
+    name: "Mai Linh",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSHjCJcdcxiIfQHVGqteQOuSnoGb3F7yNOHg&s",
+    url: "https://1055.mailinh.vn/",
+
   },
 ];
 
