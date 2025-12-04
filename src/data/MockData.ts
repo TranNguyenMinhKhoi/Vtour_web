@@ -32,6 +32,7 @@ export type BusCompanies = {
   id: string;
   name: string;
   code?: string;
+  address?: string;
   description?: string;
   url: string;
   img: string;

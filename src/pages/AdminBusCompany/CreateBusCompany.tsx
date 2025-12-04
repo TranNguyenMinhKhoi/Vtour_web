@@ -24,6 +24,7 @@ const CreateBusCompany: React.FC<CreateBusCompanyProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
+  const [url] = useState("");
   const [address, setAddress] = useState("");
 
   const handleSave = () => {
@@ -37,7 +38,8 @@ const CreateBusCompany: React.FC<CreateBusCompanyProps> = ({
       name,
       code,
       address,
-      img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850", // default ảnh
+      url,
+      img: "https://cdn-i2.congthuong.vn/stores/news_dataimages/2023/112023/07/12/phuong-trang-thanh-buoi20231107122849.jpg?rt=20231107122850",
     };
 
     onCreate(newCompany);
