@@ -37,7 +37,7 @@ const SlideNews: React.FC = () => {
 
   const containerWidth = 1200;
   const itemWidth = 300;
-  const API_KEY = 'bbda5c999acf4e6d97a8b21a982659c7'; // Thay bằng API key của bạn
+  const API_KEY = 'f0138d26fe9c4e18a988e884135d6c71';
 
   useEffect(() => {
     fetchNews();

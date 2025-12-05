@@ -42,7 +42,7 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
   // Menu hiển thị cho mọi user
   const menuItems = [
     { label: "Nhà xe", path: "/buscompany" },
-    { label: "Ưu đãi", path: "/sales" },
+    { label: "Ưu đãi", path: "/Vouchers" },
     { label: "Cẩm nang du lịch", path: "/tips" },
     { label: "Tin tức", path: "/news" },
     { label: "Vì sao? Vì-bus", path: "/us" },

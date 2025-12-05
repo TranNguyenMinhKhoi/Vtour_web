@@ -6,7 +6,6 @@ import ForgotPassword from './pages/forgotPassword/ForgotPassword'
 import {MainLayout} from './layouts'
 import Home from './pages/home/Home'
 import Tickets from './pages/tickets/Tickets'
-import Sales from './pages/sales/Sales'
 import Tips from './pages/tips/Tips'
 import Cart from './pages/cart/Cart'
 import News from './pages/news/News'
@@ -24,6 +23,7 @@ import Payment from './pages/payments/Payment'
 import Us from './pages/us/Us'
 import {GlobalLoadingProvider} from './context/GlobalLoadingContext'
 import {LoginDialogProvider} from './context/LoginDialogContext'
+import Vouchers from './pages/Vouchers/Vouchers'
 
 
 function App() {
@@ -43,7 +43,7 @@ function App() {
         <Route path="/tickets" element={<MainLayout><Tickets/></MainLayout>} />
         <Route path="/BusCompany" element={<MainLayout><BusCompanyList/></MainLayout>} />
         <Route path="/buscompanies/:buscompanyId" element={<MainLayout><BusCompanyBooking/></MainLayout>} />
-        <Route path="/sales" element={<MainLayout><Sales/></MainLayout>} />
+        <Route path="/Vouchers" element={<MainLayout><Vouchers/></MainLayout>} />
         <Route path="/tips" element={<MainLayout><Tips/></MainLayout>} />
         <Route path="/cart" element={<MainLayout><Cart/></MainLayout>} />
         <Route path="/news" element={<MainLayout><News/></MainLayout>} />

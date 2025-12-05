@@ -28,21 +28,21 @@ const HeroBanner: React.FC = () => {
       image: "/green_pastel.jpg",
       title: "Khám phá điểm đến mới",
       description: "Trải nghiệm những hành trình tuyệt vời khắp Việt Nam",
-      link: "/tours",
+      link: "/home",
     },
     {
       id: 3,
       image: "/yellow_pastel.jfif",
       title: "Ưu đãi đặc biệt",
       description: "Giảm giá lên đến 50% cho các tuyến đường hot",
-      link: "/sales",
+      link: "/Vouchers",
     },
     {
       id: 4,
       image: "/pink_pastel.jpeg",
       title: "Đặt vé nhanh chóng",
       description: "Chỉ 3 bước đơn giản để hoàn tất đặt vé của bạn",
-      link: "/booking",
+      link: "/home",
     },
   ];
 
@@ -140,7 +140,7 @@ const HeroBanner: React.FC = () => {
               <Typography
                 variant="h3"
                 sx={{
-                  fontWeight: 800,
+                  fontWeight: 700,
                   color: "white",
                   mb: 1,
                   fontSize: { xs: "1.75rem", sm: "2.5rem", md: "3rem" },
