@@ -4,7 +4,6 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
-import SlidesGroup from "../../component/SlidesGroup";
 import BookingForm from "../../component/BookingForm";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
