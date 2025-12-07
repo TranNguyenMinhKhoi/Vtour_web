@@ -589,7 +589,6 @@
 
 // // export default Payment;
 
-
 // import React, { useState, useEffect } from "react";
 // import {
 //   Box,
@@ -609,13 +608,14 @@
 // import dayjs from "dayjs";
 // import utc from "dayjs/plugin/utc";
 // import type { BookingData } from "../../component/booking/types";
-// import { useCreateBooking } from "../../hook/booking/useCreateBooking";
-// import type { CreateBookingDto } from "../../dto/booking/create-booking.dto";
+// // import type { CreateBookingDto } from "../../dto/booking/create-booking.dto";
 // import axios from "axios";
 
 // dayjs.extend(utc);
 
-// const API_BASE = "http://localhost:5000";
+// // const API_BASE = "http://localhost:5000";
+// const API_BASE = "https://bus-ticket-be-dun.vercel.app";
+
 
 // const formatTime = (isoOrFormatted?: string) => {
 //   if (!isoOrFormatted) return "—";
@@ -644,8 +644,6 @@
 //   const bookingData = location.state?.bookingData as PaymentPageData;
 
 //   const [paymentMethod, setPaymentMethod] = useState<string>("");
-//   const [, setSubmitting] = useState<boolean>(false);
-//   const [bookingId, setBookingId] = useState<string | null>(null);
 //   const [paymentId, setPaymentId] = useState<string | null>(null);
   
 //   // QR Code states
@@ -658,8 +656,6 @@
 //   // Confirmation states
 //   const [confirmingPayment, setConfirmingPayment] = useState<boolean>(false);
 //   const [openSuccessDialog, setOpenSuccessDialog] = useState<boolean>(false);
-
-//   const { mutateAsync: createBooking } = useCreateBooking();
 
 //   useEffect(() => {
 //     if (!bookingData) {
@@ -693,85 +689,39 @@
 //     ? selectedSeats.join(", ")
 //     : String(selectedSeats);
 
-//   // ⭐ Step 1: Create Booking
-//   const handleCreateBooking = async () => {
-//     if (!scheduleId || !departureStationId || !arrivalStationId) {
-//       alert("Thiếu thông tin chuyến đi hoặc trạm đón/trả. Vui lòng thử lại.");
-//       return;
-//     }
-
-//     const seatNumbers: string[] = Array.isArray(selectedSeats)
-//       ? selectedSeats.map((s) => String(s))
-//       : String(selectedSeats)
-//           .split(",")
-//           .map((s) => s.trim())
-//           .filter(Boolean);
-
-//     const passengersPayload = seatNumbers.map((sn, idx) => ({
-//       fullName: passengerNames[idx] ?? "",
-//       seatNumber: sn,
-//       idNumber: null,
-//     }));
-
-//     const payload: CreateBookingDto = {
-//       scheduleId: scheduleId,
-//       departureStop: departureStationId,
-//       arrivalStop: arrivalStationId,
-//       passengers: passengersPayload,
-//       contactInfo: {
-//         email,
-//         phone,
-//       },
-//       specialRequests: `Payment method: ${paymentMethod}`,
-//     };
-
-//     try {
-//       setSubmitting(true);
-//       console.log("➡ Creating booking...", payload);
-
-//       const res = await createBooking(payload);
-//       console.log("✅ Booking created:", res);
-
-//       const createdBookingId = res?.booking?._id;
-//       if (createdBookingId) {
-//         setBookingId(createdBookingId);
-//         return createdBookingId;
-//       } else {
-//         throw new Error("No booking ID returned");
-//       }
-//     } catch (err: any) {
-//       console.error("❌ Booking error:", err);
-//       alert(err?.message || "Không thể tạo đặt vé. Vui lòng thử lại sau.");
-//       return null;
-//     } finally {
-//       setSubmitting(false);
-//     }
-//   };
-
-//   // ⭐ Step 2: Generate QR Code
+//   // ⭐⭐⭐ Step 1: Generate QR Code (KHÔNG tạo booking)
 //   const handleGenerateQR = async () => {
 //     if (!paymentMethod) {
 //       alert("Vui lòng chọn phương thức thanh toán");
 //       return;
 //     }
 
-//     let currentBookingId = bookingId;
-
-//     // Nếu chưa tạo booking, tạo mới
-//     if (!currentBookingId) {
-//       currentBookingId = await handleCreateBooking();
-//       if (!currentBookingId) return;
+//     if (!scheduleId || !departureStationId || !arrivalStationId) {
+//       alert("Thiếu thông tin chuyến đi. Vui lòng thử lại.");
+//       return;
 //     }
 
 //     try {
 //       setQrLoading(true);
 //       const token = localStorage.getItem("token");
 
+//       // ⭐ GỌI API TẠO QR (backend sẽ tạo pending payment)
 //       const response = await axios.post(
-//         `${API_BASE}/api/payments/generate-qr`,
+//         `${API_BASE}/api/payments/generate-qr-only`,
 //         {
-//           bookingId: currentBookingId,
-//           paymentMethod: paymentMethod,
+//           scheduleId,
+//           departureStationId,
+//           arrivalStationId,
+//           passengers: selectedSeats.map((seatNum: any, idx: number) => ({
+//             fullName: passengerNames[idx] ?? "",
+//             seatNumber: String(seatNum),
+//             idNumber: null,
+//           })),
+//           contactInfo: {
+//             email,
+//             phone,
+//           },
+//           paymentMethod,
 //         },
 //         {
 //           headers: {
@@ -802,7 +752,7 @@
 //     }
 //   };
 
-//   // ⭐ Step 3: Confirm Payment (after user transferred money)
+//   // ⭐⭐⭐ Step 2: Confirm Payment (Tạo booking + xác nhận thanh toán)
 //   const handleConfirmPayment = async () => {
 //     if (!paymentId) {
 //       alert("Không tìm thấy thông tin thanh toán");
@@ -813,8 +763,9 @@
 //       setConfirmingPayment(true);
 //       const token = localStorage.getItem("token");
 
+//       // ⭐ GỌI API XÁC NHẬN (backend sẽ tạo booking + confirm payment + gửi email)
 //       const response = await axios.post(
-//         `${API_BASE}/api/payments/confirm-manual`,
+//         `${API_BASE}/api/payments/confirm-and-book`,
 //         {
 //           paymentId: paymentId,
 //         },
@@ -843,10 +794,8 @@
 //     }
 //   };
 
-//   // ⭐ Handle success dialog close
 //   const handleSuccessDialogClose = () => {
 //     setOpenSuccessDialog(false);
-//     // navigate("/booking");
 //     window.location.href = "/booking";
 //   };
 
@@ -955,7 +904,7 @@
 //                 </Box>
 //               </Box>
 
-//               {/* ⭐ Generate QR Button */}
+//               {/* Generate QR Button */}
 //               <Button
 //                 fullWidth
 //                 variant="outlined"
@@ -983,12 +932,12 @@
 //                 )}
 //               </Button>
 
-//               {/* ⭐ QR Code Display */}
+//               {/* QR Code Display */}
 //               {showQR && qrCodeUrl && (
 //                 <Box sx={{ mt: 3 }}>
 //                   <Alert severity="info" sx={{ mb: 2 }}>
 //                     <Typography variant="body2" fontWeight={600}>
-//                       📱 Quét mã QR này để thanh toán
+//                       📱 Quét mã QR và chuyển khoản để hoàn tất đặt vé
 //                     </Typography>
 //                   </Alert>
 
@@ -1031,15 +980,15 @@
 //                         💳 Số tài khoản:{" "}
 //                         <strong>{bankInfo.accountNumber}</strong>
 //                       </Typography>
-//                       {/* <Typography variant="body2" sx={{ mb: 0.5 }}>
-//                         💰 Số tiền demo:{" "}
+//                       <Typography variant="body2" sx={{ mb: 0.5 }}>
+//                         💰 Số tiền:{" "}
 //                         <strong style={{ color: "#d32f2f" }}>
 //                           {new Intl.NumberFormat("vi-VN").format(
 //                             bankInfo.transferAmount
 //                           )}{" "}
 //                           đ
 //                         </strong>
-//                       </Typography> */}
+//                       </Typography>
 //                       <Typography variant="body2">
 //                         📝 Nội dung: <strong>{bankInfo.transferContent}</strong>
 //                       </Typography>
@@ -1048,7 +997,7 @@
 
 //                   {/* Instructions */}
 //                   {instructions.length > 0 && (
-//                     <Paper sx={{ p: 2, bgcolor: "#fff3e0" }}>
+//                     <Paper sx={{ p: 2, bgcolor: "#fff3e0", mb: 2 }}>
 //                       <Typography
 //                         variant="subtitle2"
 //                         fontWeight={700}
@@ -1068,7 +1017,7 @@
 //                     </Paper>
 //                   )}
 
-//                   {/* ⭐ Confirm Payment Button */}
+//                   {/* Confirm Payment Button */}
 //                   <Button
 //                     fullWidth
 //                     variant="contained"
@@ -1076,7 +1025,7 @@
 //                     onClick={handleConfirmPayment}
 //                     disabled={confirmingPayment}
 //                     sx={{
-//                       mt: 3,
+//                       mt: 2,
 //                       fontWeight: 700,
 //                       py: 1.5,
 //                       bgcolor: "success.main",
@@ -1133,7 +1082,6 @@
 //                   mb: 3,
 //                 }}
 //               >
-//                 {/* Departure Station */}
 //                 <Box sx={{ flex: 1 }}>
 //                   <Box
 //                     sx={{
@@ -1164,7 +1112,6 @@
 //                   </Typography>
 //                 </Box>
 
-//                 {/* Times */}
 //                 <Box sx={{ textAlign: "center", minWidth: 80 }}>
 //                   <Typography
 //                     variant="subtitle1"
@@ -1190,7 +1137,6 @@
 //                   </Typography>
 //                 </Box>
 
-//                 {/* Arrival Station */}
 //                 <Box sx={{ flex: 1 }}>
 //                   <Box
 //                     sx={{
@@ -1251,8 +1197,9 @@
 //                 </Box>
 //               </Box>
 
-//               {/* Passenger Information */}
 //               <Divider sx={{ my: 2 }} />
+
+//               {/* Passenger Information */}
 //               <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>
 //                 Thông tin hành khách
 //               </Typography>
@@ -1321,18 +1268,12 @@
 //                   {totalPrice ?? "150.000 đ"}
 //                 </Typography>
 //               </Box>
-
-//               {/* <Alert severity="warning" sx={{ mt: 2 }}>
-//                 <Typography variant="body2">
-//                   ⚠️ <strong>Demo:</strong> Chỉ cần chuyển <strong>1.000đ</strong> để test thanh toán
-//                 </Typography>
-//               </Alert> */}
 //             </Paper>
 //           </Box>
 //         </Box>
 //       </Box>
 
-//       {/* ⭐ Success Dialog */}
+//       {/* Success Dialog */}
 //       <Dialog open={openSuccessDialog} onClose={handleSuccessDialogClose}>
 //         <DialogTitle>
 //           <Box sx={{ textAlign: "center" }}>
@@ -1377,9 +1318,6 @@
 
 // export default Payment;
 
-// ============================================
-// FRONTEND: Payment.tsx (Fixed)
-// ============================================
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -1394,13 +1332,16 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
+  IconButton,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import type { BookingData } from "../../component/booking/types";
-// import type { CreateBookingDto } from "../../dto/booking/create-booking.dto";
 import axios from "axios";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import CloseIcon from "@mui/icons-material/Close";
 
 dayjs.extend(utc);
 
@@ -1429,6 +1370,14 @@ interface PaymentPageData extends BookingData {
   phone: string;
 }
 
+interface VoucherData {
+  id: string;
+  code: string;
+  name?: string;
+  discountType: "percentage" | "fixed";
+  discountValue: number;
+}
+
 const Payment: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -1443,6 +1392,13 @@ const Payment: React.FC = () => {
   const [qrLoading, setQrLoading] = useState<boolean>(false);
   const [bankInfo, setBankInfo] = useState<any>(null);
   const [instructions, setInstructions] = useState<string[]>([]);
+  
+  // Voucher states
+  const [voucherCode, setVoucherCode] = useState<string>("");
+  const [appliedVoucher, setAppliedVoucher] = useState<VoucherData | null>(null);
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  const [applyingVoucher, setApplyingVoucher] = useState<boolean>(false);
+  const [voucherError, setVoucherError] = useState<string | null>(null);
   
   // Confirmation states
   const [confirmingPayment, setConfirmingPayment] = useState<boolean>(false);
@@ -1480,7 +1436,67 @@ const Payment: React.FC = () => {
     ? selectedSeats.join(", ")
     : String(selectedSeats);
 
-  // ⭐⭐⭐ Step 1: Generate QR Code (KHÔNG tạo booking)
+  // Parse totalPrice
+  const parsedTotalPrice = typeof totalPrice === "string" 
+    ? parseFloat(totalPrice.replace(/[^\d]/g, "")) 
+    : totalPrice || 0;
+
+  // Calculate final amount
+  const finalAmount = parsedTotalPrice - discountAmount;
+
+  // ⭐ Apply Voucher
+  const handleApplyVoucher = async () => {
+    if (!voucherCode.trim()) {
+      setVoucherError("Vui lòng nhập mã voucher");
+      return;
+    }
+
+    try {
+      setApplyingVoucher(true);
+      setVoucherError(null);
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        `${API_BASE}/api/voucher/validate`,
+        {
+          code: voucherCode.trim().toUpperCase(),
+          bookingAmount: parsedTotalPrice,
+          routeId: null, // Optional: pass routeId if needed
+          companyId: null, // Optional: pass companyId if needed
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setAppliedVoucher(response.data.voucher);
+        setDiscountAmount(response.data.discountAmount);
+        setVoucherError(null);
+      }
+    } catch (error: any) {
+      console.error("❌ Voucher error:", error);
+      setVoucherError(
+        error?.response?.data?.message || "Không thể áp dụng voucher"
+      );
+      setAppliedVoucher(null);
+      setDiscountAmount(0);
+    } finally {
+      setApplyingVoucher(false);
+    }
+  };
+
+  // ⭐ Remove Voucher
+  const handleRemoveVoucher = () => {
+    setAppliedVoucher(null);
+    setDiscountAmount(0);
+    setVoucherCode("");
+    setVoucherError(null);
+  };
+
+  // ⭐ Generate QR Code
   const handleGenerateQR = async () => {
     if (!paymentMethod) {
       alert("Vui lòng chọn phương thức thanh toán");
@@ -1496,7 +1512,6 @@ const Payment: React.FC = () => {
       setQrLoading(true);
       const token = localStorage.getItem("token");
 
-      // ⭐ GỌI API TẠO QR (backend sẽ tạo pending payment)
       const response = await axios.post(
         `${API_BASE}/api/payments/generate-qr-only`,
         {
@@ -1513,6 +1528,8 @@ const Payment: React.FC = () => {
             phone,
           },
           paymentMethod,
+          voucherCode: appliedVoucher?.code || null, // ⭐ Pass voucher code
+          discountAmount: discountAmount, // ⭐ Pass discount amount
         },
         {
           headers: {
@@ -1543,7 +1560,7 @@ const Payment: React.FC = () => {
     }
   };
 
-  // ⭐⭐⭐ Step 2: Confirm Payment (Tạo booking + xác nhận thanh toán)
+  // ⭐ Confirm Payment
   const handleConfirmPayment = async () => {
     if (!paymentId) {
       alert("Không tìm thấy thông tin thanh toán");
@@ -1554,7 +1571,6 @@ const Payment: React.FC = () => {
       setConfirmingPayment(true);
       const token = localStorage.getItem("token");
 
-      // ⭐ GỌI API XÁC NHẬN (backend sẽ tạo booking + confirm payment + gửi email)
       const response = await axios.post(
         `${API_BASE}/api/payments/confirm-and-book`,
         {
@@ -1750,7 +1766,6 @@ const Payment: React.FC = () => {
                     />
                   </Box>
 
-                  {/* Bank Info */}
                   {bankInfo && (
                     <Paper sx={{ p: 2, bgcolor: "#f9f9f9", mb: 2 }}>
                       <Typography
@@ -1786,7 +1801,6 @@ const Payment: React.FC = () => {
                     </Paper>
                   )}
 
-                  {/* Instructions */}
                   {instructions.length > 0 && (
                     <Paper sx={{ p: 2, bgcolor: "#fff3e0", mb: 2 }}>
                       <Typography
@@ -1808,7 +1822,6 @@ const Payment: React.FC = () => {
                     </Paper>
                   )}
 
-                  {/* Confirm Payment Button */}
                   <Button
                     fullWidth
                     variant="contained"
@@ -2040,6 +2053,80 @@ const Payment: React.FC = () => {
               )}
             </Paper>
 
+            {/* Voucher Section */}
+            <Paper sx={{ p: 3, borderRadius: 2, mb: 2 }}>
+              <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 2 }}>
+                🎟️ Mã giảm giá
+              </Typography>
+
+              {!appliedVoucher ? (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    placeholder="Nhập mã giảm giá"
+                    value={voucherCode}
+                    onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                    disabled={applyingVoucher || showQR}
+                    error={!!voucherError}
+                    helperText={voucherError}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={handleApplyVoucher}
+                    disabled={applyingVoucher || showQR}
+                    sx={{ minWidth: 100 }}
+                  >
+                    {applyingVoucher ? (
+                      <CircularProgress size={20} />
+                    ) : (
+                      "Áp dụng"
+                    )}
+                  </Button>
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    bgcolor: "#f0f8ff",
+                    p: 2,
+                    borderRadius: 1,
+                    border: "1px solid",
+                    borderColor: "primary.main",
+                  }}
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <LocalOfferIcon color="primary" />
+                      <Box>
+                        <Typography variant="body2" fontWeight={700}>
+                          {appliedVoucher.code}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          Giảm{" "}
+                          {appliedVoucher.discountType === "percentage"
+                            ? `${appliedVoucher.discountValue}%`
+                            : `${appliedVoucher.discountValue.toLocaleString(
+                                "vi-VN"
+                              )}đ`}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <IconButton
+                      size="small"
+                      onClick={handleRemoveVoucher}
+                      disabled={showQR}
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                </Box>
+              )}
+            </Paper>
+
             {/* Price Summary */}
             <Paper sx={{ p: 3, borderRadius: 2 }}>
               <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 2 }}>
@@ -2051,12 +2138,45 @@ const Payment: React.FC = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  mb: 2,
+                  mb: 1,
                 }}
               >
-                <Typography color="text.secondary">Tổng số tiền</Typography>
+                <Typography color="text.secondary">Tổng tiền vé</Typography>
+                <Typography variant="body1" fontWeight={600}>
+                  {parsedTotalPrice.toLocaleString("vi-VN")} đ
+                </Typography>
+              </Box>
+
+              {appliedVoucher && discountAmount > 0 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 1,
+                  }}
+                >
+                  <Typography color="success.main">Giảm giá</Typography>
+                  <Typography variant="body1" fontWeight={600} color="success.main">
+                    - {discountAmount.toLocaleString("vi-VN")} đ
+                  </Typography>
+                </Box>
+              )}
+
+              <Divider sx={{ my: 2 }} />
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h6" fontWeight={700}>
+                  Tổng thanh toán
+                </Typography>
                 <Typography variant="h5" fontWeight={700} color="primary.main">
-                  {totalPrice ?? "150.000 đ"}
+                  {finalAmount.toLocaleString("vi-VN")} đ
                 </Typography>
               </Box>
             </Paper>

@@ -52,8 +52,8 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
   const adminSubMenu = [
     { label: "Quản lý người dùng", path: "/AdminAccount", key: "manage-users" },
     { label: "Quản lý nhà xe", path: "/AdminBusCompany", key: "manage-bus" },
-    { label: "Quản lý tuyến đường", path: "/AdminTours", key: "manage-tours" },
-    // { label: "Quản lý lộ trình", path: "/AdminRevenue", key: "manage-revenue" },
+    { label: "Quản lý tuyến đường", path: "/AdminRoute", key: "manage-route" },
+    { label: "Quản lý lịch trình", path: "/AdminSchedule", key: "manage-schedule" },
   ];
 
   // Tính toán submenu hiển thị dựa trên role

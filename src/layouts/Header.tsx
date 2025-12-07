@@ -301,14 +301,14 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
                   Thông tin cá nhân
                 </MenuItem>
 
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => handleAccountMenuSelect("booking", "/booking")}
                 >
                   <ListItemIcon>
                     <ConfirmationNumberIcon fontSize="small" />
                   </ListItemIcon>
                   Vé của tôi
-                </MenuItem>
+                </MenuItem> */}
 
                 <Divider />
 

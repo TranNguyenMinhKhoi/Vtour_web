@@ -16,7 +16,7 @@ import BusCompanyList from './pages/BusCompany/BusCompanyList'
 import BusCompanyBooking from './pages/BusCompany/BusCompanyBooking'
 import MainAdminBusCompany from './pages/AdminBusCompany/MainAdminBusCompany'
 import MainAdminAccount from './pages/AdminAccount/MainAdminAccount'
-import MainAdminTours from './pages/AdminTours/MainAdminTours'
+import MainAdminTours from './pages/AdminRoute/MainAdminRoute'
 import Profile from './pages/profile/Profile'
 import RoutesPage from './pages/routes/RoutesPage'
 import Payment from './pages/payments/Payment'
@@ -24,6 +24,8 @@ import Us from './pages/us/Us'
 import {GlobalLoadingProvider} from './context/GlobalLoadingContext'
 import {LoginDialogProvider} from './context/LoginDialogContext'
 import Vouchers from './pages/Vouchers/Vouchers'
+import AdminSchedule from './pages/AdminSchedule/AdminSchedule'
+import MainAdminRoute from './pages/AdminRoute/MainAdminRoute'
 
 
 function App() {
@@ -52,10 +54,11 @@ function App() {
         <Route path="/OTPRegister" element={<OTPRegister/>} />
         <Route path="/AdminBusCompany" element={<MainLayout><MainAdminBusCompany/></MainLayout>} />
         <Route path="/AdminAccount" element={<MainLayout><MainAdminAccount/></MainLayout>} />
-        <Route path="/AdminTours" element={<MainLayout><MainAdminTours/></MainLayout>} />
+        <Route path="/AdminRoute" element={<MainLayout><MainAdminRoute/></MainLayout>} />
         <Route path="/profile" element={<MainLayout><Profile/></MainLayout>} />
         <Route path="/payments" element={<MainLayout><Payment/></MainLayout>} />
         <Route path="/us" element={<MainLayout><Us/></MainLayout>} />
+        <Route path="/AdminSchedule" element={<MainLayout><AdminSchedule/></MainLayout>} />
       </Routes>
       </LoginDialogProvider>
     </GlobalLoadingProvider>

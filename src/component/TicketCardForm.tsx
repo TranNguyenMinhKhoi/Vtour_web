@@ -5,6 +5,7 @@ import LocalDrinkIcon from "@mui/icons-material/LocalDrink";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import AddIcon from "@mui/icons-material/Add";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+// import dayjs from "dayjs";
 
 interface TicketCardFormProps {
   logo: string;
@@ -39,6 +40,10 @@ const TicketCardForm: React.FC<TicketCardFormProps> = ({
   scheduleId,
   busId,
 }) => {
+
+//   const formatDateTime = (dateString: string) => {
+//   return dayjs(dateString).format('DD/MM/YYYY HH:mm');
+// };
   return (
     <Box
       sx={{
@@ -70,6 +75,7 @@ const TicketCardForm: React.FC<TicketCardFormProps> = ({
           }}
         >
           <Typography fontWeight={700} fontSize={20} color="black">
+            {/* {formatDateTime(startTime)} */}
             {startTime}
           </Typography>
           <Typography color="black" variant="body2">

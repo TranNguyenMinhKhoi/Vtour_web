@@ -10,6 +10,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SlideTopVenue from "../../component/SlideTopVenue";
 import SlideNews from "../../component/SlideNews";
+import SlideTopVoucher from "../../component/SlideTopVoucher";
 
 const Home: React.FC = () => {
   const [cities, setCities] = useState<string[]>([]);
@@ -103,7 +104,8 @@ const Home: React.FC = () => {
         </Box>
       </Box> */}
       <SlideTopVenue/>
-      <SlidesGroup />
+      {/* <SlidesGroup /> */}
+      <SlideTopVoucher/>
       <SlideNews/>
     </Box>
   );
