@@ -392,8 +392,8 @@ const AdminSchedule: React.FC = () => {
           <Typography variant="body2" color="text.secondary" component="ul">
             <li>Giờ đến phải sau giờ xuất bến</li>
             <li>Số ghế khả dụng sẽ tự động lấy từ loại xe</li>
-            <li>Trạng thái mặc định là "scheduled"</li>
-            <li>Chỉ bus manager và admin mới có thể tạo lịch trình</li>
+            {/* <li>Trạng thái mặc định là "scheduled"</li>
+            <li>Chỉ bus manager và admin mới có thể tạo lịch trình</li> */}
           </Typography>
         </Paper>
       </Box>

@@ -1,19 +1,37 @@
-import { Box, Button, Typography, CircularProgress, Card, CardContent, Chip, Grid, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
+  Card,
+  CardContent,
+  Chip,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { useLoginInfo } from "../../hook/auth/useLoginInfo";
 import { useMyBookings } from "../../hook/booking/useMyBooking";
 import { useCancelBooking } from "../../hook/booking/useCancelBooking";
-import {useLoginDialog} from "../../context/LoginDialogContext";
+import { useLoginDialog } from "../../context/LoginDialogContext";
 
 const EnableBooking = () => {
   const token = localStorage.getItem("token");
   const hasToken = Boolean(token);
-  
+
   const { openLoginDialog } = useLoginDialog();
   const { data: loginData } = useLoginInfo({ enabled: hasToken });
-  const { data: bookingsData, isLoading, error, refetch } = useMyBookings(hasToken);
+  const {
+    data: bookingsData,
+    isLoading,
+    error,
+    refetch,
+  } = useMyBookings(hasToken);
   const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
 
   const isLoggedIn = Boolean(loginData && hasToken);
@@ -25,17 +43,37 @@ const EnableBooking = () => {
   // Chưa đăng nhập
   if (!isLoggedIn) {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column", textAlign: "left", gap: 3, p: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          textAlign: "left",
+          gap: 3,
+          p: 3,
+        }}
+      >
         <Typography variant="h3" color="black">
           Đặt chỗ của bạn
         </Typography>
 
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 3 }}>
-          <img src="/emptycart.png" alt="img-empty" style={{ width: "300px", height: "auto" }} />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 3,
+          }}
+        >
+          <img
+            src="/emptycart.png"
+            alt="img-empty"
+            style={{ width: "300px", height: "auto" }}
+          />
           <Typography variant="h4" color="black">
             Vui lòng đăng nhập để xem đặt chỗ
           </Typography>
-          
+
           <Button
             onClick={() => openLoginDialog()}
             sx={{
@@ -55,7 +93,14 @@ const EnableBooking = () => {
   // Đang load
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: 400,
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -64,7 +109,15 @@ const EnableBooking = () => {
   // Có lỗi
   if (error) {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column", textAlign: "center", gap: 2, p: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          textAlign: "center",
+          gap: 2,
+          p: 3,
+        }}
+      >
         <Typography variant="h5" color="error">
           Không thể tải danh sách đặt chỗ
         </Typography>
@@ -79,13 +132,33 @@ const EnableBooking = () => {
   // Không có booking
   if (bookings.length === 0) {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column", textAlign: "left", gap: 3, p: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          textAlign: "left",
+          gap: 3,
+          p: 3,
+        }}
+      >
         <Typography variant="h3" color="black">
           Đặt chỗ của bạn
         </Typography>
 
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 3 }}>
-          <img src="/emptycart.png" alt="img-empty" style={{ width: "300px", height: "auto" }} />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 3,
+          }}
+        >
+          <img
+            src="/emptycart.png"
+            alt="img-empty"
+            style={{ width: "300px", height: "auto" }}
+          />
           <Typography variant="h4" color="black">
             Bạn chưa có giao dịch nào
           </Typography>
@@ -126,16 +199,20 @@ const EnableBooking = () => {
     cancelBooking(
       {
         bookingId: selectedBooking.bookingReference,
-        email: selectedBooking.contactInfo?.email || loginData?.user?.email || "",
+        email:
+          selectedBooking.contactInfo?.email || loginData?.user?.email || "",
       },
       {
         onSuccess: (data) => {
           alert(`✅ ${data.message}`);
           handleCloseCancel();
-          refetch(); 
+          refetch();
         },
         onError: (error: any) => {
-          const errorMsg = error?.response?.data?.message || error?.message || "Không thể hủy vé";
+          const errorMsg =
+            error?.response?.data?.message ||
+            error?.message ||
+            "Không thể hủy vé";
           alert(`❌ ${errorMsg}`);
         },
       }
@@ -145,27 +222,43 @@ const EnableBooking = () => {
   // Helper functions
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed": return "success";
-      case "reserved": return "warning";
-      case "cancelled": return "error";
-      case "completed": return "info";
-      default: return "default";
+      case "confirmed":
+        return "success";
+      case "reserved":
+        return "warning";
+      case "cancelled":
+        return "error";
+      case "completed":
+        return "info";
+      default:
+        return "default";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "confirmed": return "Đã xác nhận";
-      case "reserved": return "Đã đặt";
-      case "cancelled": return "Đã hủy";
-      case "completed": return "Hoàn thành";
-      default: return status;
+      case "confirmed":
+        return "Đã xác nhận";
+      case "reserved":
+        return "Đã đặt";
+      case "cancelled":
+        return "Đã hủy";
+      case "completed":
+        return "Hoàn thành";
+      default:
+        return status;
     }
   };
 
   const canCancel = (booking: any) => {
-    return booking.bookingStatus === "reserved" || booking.bookingStatus === "confirmed";
+    return (
+      booking.bookingStatus === "reserved" ||
+      booking.bookingStatus === "confirmed"
+    );
   };
+
+  const formatTime = (iso?: string) =>
+    iso ? dayjs.utc(iso).format("HH:mm") : "—";
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3, p: 3 }}>
@@ -175,33 +268,56 @@ const EnableBooking = () => {
 
       <Grid container spacing={3}>
         {bookings.map((booking) => {
-          const departureCity = booking.scheduleId?.routeId?.departureStationId?.city || "N/A";
-          const arrivalCity = booking.scheduleId?.routeId?.arrivalStationId?.city || "N/A";
-          const departureTime = booking.scheduleId?.departureTime 
-            ? dayjs(booking.scheduleId.departureTime).format("DD/MM/YYYY HH:mm")
+          const departureCity =
+            booking.scheduleId?.routeId?.departureStationId?.city || "N/A";
+          const arrivalCity =
+            booking.scheduleId?.routeId?.arrivalStationId?.city || "N/A";
+          // const departureTime = booking.scheduleId?.departureTime
+          //   ? dayjs(booking.scheduleId.departureTime).format("DD/MM/YYYY HH:mm")
+          //   : "N/A";
+          const departureTime = booking.scheduleId?.departureTime
+            ? `${dayjs(booking.scheduleId.departureTime).format(
+                "DD/MM/YYYY"
+              )} ${formatTime(booking.scheduleId.departureTime)}`
             : "N/A";
-          const companyName = booking.scheduleId?.busId?.companyId?.companyName || "N/A";
-          
-          const seatNumbers = booking.passengers && Array.isArray(booking.passengers)
-            ? booking.passengers.map(p => p.seatNumber).filter(Boolean).join(", ")
-            : "N/A";
+
+          const companyName =
+            booking.scheduleId?.busId?.companyId?.companyName || "N/A";
+
+          const seatNumbers =
+            booking.passengers && Array.isArray(booking.passengers)
+              ? booking.passengers
+                  .map((p) => p.seatNumber)
+                  .filter(Boolean)
+                  .join(", ")
+              : "N/A";
 
           return (
             <Grid size={{ xs: 12, md: 6 }} key={booking._id}>
               <Card sx={{ borderRadius: 2, boxShadow: 2 }}>
                 <CardContent>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 2,
+                    }}
+                  >
                     <Typography variant="h6" fontWeight={700}>
                       {booking.bookingReference}
                     </Typography>
-                    <Chip 
-                      label={getStatusLabel(booking.bookingStatus)} 
+                    <Chip
+                      label={getStatusLabel(booking.bookingStatus)}
                       color={getStatusColor(booking.bookingStatus)}
                       size="small"
                     />
                   </Box>
 
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
                     {departureCity} → {arrivalCity}
                   </Typography>
 
@@ -209,41 +325,50 @@ const EnableBooking = () => {
                     🕐 {departureTime}
                   </Typography>
 
-                  <Typography variant="body2">
-                    🚌 {companyName}
-                  </Typography>
+                  <Typography variant="body2">🚌 {companyName}</Typography>
 
                   <Typography variant="body2">
                     💺 {booking.numberOfSeats} ghế | {seatNumbers}
                   </Typography>
 
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2, pt: 2, borderTop: "1px solid #eee" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mt: 2,
+                      pt: 2,
+                      borderTop: "1px solid #eee",
+                    }}
+                  >
                     <Typography variant="h6" color="primary" fontWeight={700}>
-                      {new Intl.NumberFormat("vi-VN").format(booking.totalAmount)} đ
+                      {new Intl.NumberFormat("vi-VN").format(
+                        booking.totalAmount
+                      )}{" "}
+                      đ
                     </Typography>
-                    
+
                     {/* Nút Hủy vé - chỉ hiện nếu có thể hủy */}
                     {canCancel(booking) ? (
-                      <Button 
-                        size="small" 
+                      <Button
+                        size="small"
                         variant="outlined"
                         color="error"
                         onClick={() => handleOpenCancel(booking)}
                         disabled={isCancelling}
                       >
-                        {isCancelling && selectedBooking?._id === booking._id ? (
+                        {isCancelling &&
+                        selectedBooking?._id === booking._id ? (
                           <CircularProgress size={20} />
                         ) : (
                           "Hủy vé"
                         )}
                       </Button>
                     ) : (
-                      <Button 
-                        size="small" 
-                        variant="outlined"
-                        disabled
-                      >
-                        {booking.bookingStatus === "cancelled" ? "Đã hủy" : "Không thể hủy"}
+                      <Button size="small" variant="outlined" disabled>
+                        {booking.bookingStatus === "cancelled"
+                          ? "Đã hủy"
+                          : "Không thể hủy"}
                       </Button>
                     )}
                   </Box>
@@ -253,19 +378,23 @@ const EnableBooking = () => {
           );
         })}
       </Grid>
-      
 
       <Dialog open={openConfirm} onClose={handleCloseCancel}>
         <DialogTitle>Xác nhận hủy vé</DialogTitle>
         <DialogContent>
           <Typography>
-            Bạn có chắc chắn muốn hủy vé <strong>{selectedBooking?.bookingReference}</strong>?
+            Bạn có chắc chắn muốn hủy vé{" "}
+            <strong>{selectedBooking?.bookingReference}</strong>?
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             • Số ghế: {selectedBooking?.numberOfSeats}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            • Tổng tiền: {new Intl.NumberFormat("vi-VN").format(selectedBooking?.totalAmount || 0)} đ
+            • Tổng tiền:{" "}
+            {new Intl.NumberFormat("vi-VN").format(
+              selectedBooking?.totalAmount || 0
+            )}{" "}
+            đ
           </Typography>
           <Typography variant="body2" color="warning.main" sx={{ mt: 2 }}>
             ⚠️ Hành động này không thể hoàn tác
@@ -275,9 +404,9 @@ const EnableBooking = () => {
           <Button onClick={handleCloseCancel} disabled={isCancelling}>
             Đóng
           </Button>
-          <Button 
-            onClick={handleConfirmCancel} 
-            color="error" 
+          <Button
+            onClick={handleConfirmCancel}
+            color="error"
             variant="contained"
             disabled={isCancelling}
           >
