@@ -7,14 +7,9 @@ export const useLogOut = () => {
   return useMutation({
     mutationFn: () => authAPI.logout(),
     onSuccess: () => {
-      // Xóa token khỏi localStorage
       localStorage.removeItem("token");
-      
-      // Clear tất cả cache của react-query
       queryClient.clear();
-      
-      // Chỉ invalidate query cụ thể nếu cần
-      // queryClient.invalidateQueries({ queryKey: ["loginInfo"] });
+            // queryClient.invalidateQueries({ queryKey: ["loginInfo"] });
     },
   });
 };

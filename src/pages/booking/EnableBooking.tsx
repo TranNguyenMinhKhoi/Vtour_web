@@ -19,7 +19,6 @@ const EnableBooking = () => {
   const isLoggedIn = Boolean(loginData && hasToken);
   const bookings = bookingsData?.bookings || [];
 
-  // ⭐ State cho dialog confirm
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
 
@@ -38,7 +37,6 @@ const EnableBooking = () => {
           </Typography>
           
           <Button
-            // onClick={openLoginDialog}
             onClick={() => openLoginDialog()}
             sx={{
               bgcolor: "blueviolet",
@@ -109,19 +107,19 @@ const EnableBooking = () => {
     );
   }
 
-  // ⭐ Handler mở dialog confirm
+  // Handler mở dialog confirm
   const handleOpenCancel = (booking: any) => {
     setSelectedBooking(booking);
     setOpenConfirm(true);
   };
 
-  // ⭐ Handler đóng dialog
+  // Handler đóng dialog
   const handleCloseCancel = () => {
     setOpenConfirm(false);
     setSelectedBooking(null);
   };
 
-  // ⭐ Handler xác nhận hủy
+  // Handler xác nhận hủy
   const handleConfirmCancel = () => {
     if (!selectedBooking) return;
 
@@ -134,7 +132,7 @@ const EnableBooking = () => {
         onSuccess: (data) => {
           alert(`✅ ${data.message}`);
           handleCloseCancel();
-          refetch(); // ⭐ Refetch để cập nhật UI
+          refetch(); 
         },
         onError: (error: any) => {
           const errorMsg = error?.response?.data?.message || error?.message || "Không thể hủy vé";
@@ -165,12 +163,10 @@ const EnableBooking = () => {
     }
   };
 
-  // ⭐ Check xem có thể hủy không
   const canCancel = (booking: any) => {
     return booking.bookingStatus === "reserved" || booking.bookingStatus === "confirmed";
   };
 
-  // Có bookings - hiển thị danh sách
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3, p: 3 }}>
       <Typography variant="h3" color="black">
@@ -226,7 +222,7 @@ const EnableBooking = () => {
                       {new Intl.NumberFormat("vi-VN").format(booking.totalAmount)} đ
                     </Typography>
                     
-                    {/* ⭐ Nút Hủy vé - chỉ hiện nếu có thể hủy */}
+                    {/* Nút Hủy vé - chỉ hiện nếu có thể hủy */}
                     {canCancel(booking) ? (
                       <Button 
                         size="small" 

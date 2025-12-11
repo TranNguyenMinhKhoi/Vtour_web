@@ -63,18 +63,6 @@ const MainAdminAccount = () => {
                 onClick={() => handleRowClick(account)}
               >
                 <TableCell>{index + 1}</TableCell>
-                {/* <TableCell>{company.id}</TableCell>
-                <CardMedia
-                  component="img"
-                  image={company?.img ?? ""}
-                  alt={company?.name ?? ""}
-                  sx={{
-                    height: { xs: 60, sm: 70, md: 60 },
-                    objectFit: "cover",
-                    borderTopLeftRadius: 8,
-                    borderTopRightRadius: 8,
-                  }}
-                /> */}
                 <TableCell>{account.name}</TableCell>
                 <TableCell>{account.username}</TableCell>
                 <TableCell>{account.role}</TableCell>

@@ -176,7 +176,6 @@ const MainAdminRoute = () => {
 
   // Create route
   const handleCreateRoute = async () => {
-    // Validation
     if (!routeCode || !routeName || !departureStationId || !arrivalStationId) {
       showSnackbar("Vui lòng điền đầy đủ thông tin bắt buộc", "error");
       return;
@@ -195,7 +194,7 @@ const MainAdminRoute = () => {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem("token"); // Lấy token từ localStorage
+      const token = localStorage.getItem("token");
       
       const newRoute = {
         routeCode: routeCode.trim().toUpperCase(),
@@ -217,7 +216,7 @@ const MainAdminRoute = () => {
       if (response.data.route) {
         showSnackbar("Tạo tuyến đường thành công!", "success");
         resetForm();
-        fetchRoutes(); // Refresh list
+        fetchRoutes();
       }
     } catch (error: any) {
       console.error("Lỗi khi tạo tuyến đường:", error);

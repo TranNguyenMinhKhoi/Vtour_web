@@ -1,7 +1,6 @@
 import './App.css'
 import Login from './pages/login/Login'
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
-import ForgotPassword from './pages/forgotPassword/ForgotPassword'
 // import Register from './pages/register/Register'
 import {MainLayout} from './layouts'
 import Home from './pages/home/Home'
@@ -37,7 +36,6 @@ function App() {
       <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/login" element={<Login />} />
         {/* <Route path="/register" element={<Register />} /> */}
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/home" element={<MainLayout><Home/></MainLayout>} />
         {/* <Route path="/home-verified" element={<HomeNo/>}/> */}
         <Route path="/routes" element={<MainLayout><RoutesPage/></MainLayout>} />

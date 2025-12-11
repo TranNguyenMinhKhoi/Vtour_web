@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useOTPVerify } from "../../hook/auth/useOTPVerify";
 
 interface OTPRegisterProps {
-  initialEmail?: string; // when embedded, parent can pass email để autofill
+  initialEmail?: string;
 }
 
 const OTPRegister: React.FC<OTPRegisterProps> = ({ initialEmail }) => {
@@ -23,19 +23,16 @@ const OTPRegister: React.FC<OTPRegisterProps> = ({ initialEmail }) => {
   const state = (location.state || {}) as { email?: string };
   const initialEmailFromLocation = state.email ?? "";
 
-  // ưu tiên email được truyền từ props (Register component), nếu không có thì dùng từ location.state
   const [email, setEmail] = useState(initialEmail ?? initialEmailFromLocation);
   const [otp, setOtp] = useState("");
 
   const { mutate: verifyOtp, isPending } = useOTPVerify();
 
-  // dialog thông báo kết quả verify
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMsg, setDialogMsg] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    // nếu có email từ prop thì autofill (ví dụ khi được nhúng trong Register)
     if (initialEmail) setEmail(initialEmail);
   }, [initialEmail]);
 
@@ -70,7 +67,6 @@ const OTPRegister: React.FC<OTPRegisterProps> = ({ initialEmail }) => {
 
   return (
     <>
-      {/* Form chính (có thể được render cả như 1 trang hoặc nhúng vào dialog của Register) */}
       <Box
         sx={{
           maxWidth: 420,

@@ -26,7 +26,6 @@ const Cart = () => {
       >
         <img
             src="/emptycart.png"
-          // src="/empty.png"
           alt="img-empty-cart"
           style={{ width: "300px", height: "auto" }}
         />

@@ -15,10 +15,8 @@ import {
 } from "@mui/material";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-// import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
-// import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import { useLoginInfo } from "../hook/auth/useLoginInfo";
 import { useLogOut } from "../hook/auth/useLogOut";
 import {useLoginDialog} from "../context/LoginDialogContext";
@@ -36,7 +34,7 @@ const menuItems = [
 const Header: React.FC<HeaderProps> = ({ scrolled }) => {
   const navigate = useNavigate();
 
-  // Kiểm tra token trước khi gọi API
+  // Kiểm tra token
   const token = localStorage.getItem("token");
   const hasToken = Boolean(token);
 
@@ -45,11 +43,8 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     enabled: hasToken,
   });
 
-  // Mutation logout
   const { mutate: logout, isPending: isLoggingOut } = useLogOut();
 
-  // local state dialog/menu
-  // const [openLogin, setOpenLogin] = useState(false);
   const { openLoginDialog } = useLoginDialog()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -63,7 +58,6 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
   // Nếu server trả về user (loginData) thì đóng dialog login tự động
   useEffect(() => {
     if (loginData) {
-      // setOpenLogin(false);
       setAnchorEl(null);
     }
   }, [loginData]);
@@ -92,13 +86,11 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     handleMenuClose();
     logout(undefined, {
       onSuccess: () => {
-        // navigate("/home");
         window.location.href = "/home";
       },
       onError: (error: any) => {
         console.error("Logout error:", error);
         localStorage.removeItem("token");
-        // navigate("/home");
         window.location.href = "/home";
       },
     });
@@ -112,7 +104,6 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
     handleMenuClose();
 
     if (action === "login") {
-      // setOpenLogin(true);
       openLoginDialog();
       return;
     }
@@ -186,17 +177,6 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
 
         {/* Right actions */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-          {/* price language
-          <Typography
-            variant="body2"
-            sx={{
-              display: { xs: "none", md: "block" },
-              color: scrolled ? "text.secondary" : "rgba(255,255,255,0.9)",
-            }}
-          >
-            15.000 VND | VI
-          </Typography> */}
-
           {/* Menu buttons */}
           {menuItems.map((item) => (
             <Button
@@ -329,19 +309,6 @@ const Header: React.FC<HeaderProps> = ({ scrolled }) => {
           </Menu>
         </Box>
       </Toolbar>
-      
-
-      {/* Dialog Login */}
-      {/* <Dialog
-        open={openLogin}
-        onClose={() => setOpenLogin(false)}
-        fullWidth
-        PaperProps={{ sx: { borderRadius: 3 } }}
-      >
-        <DialogContent sx={{ p: 0 }}>
-          <Login dialogMode onClose={() => setOpenLogin(false)} />
-        </DialogContent>
-      </Dialog> */}
     </AppBar>
   );
 };

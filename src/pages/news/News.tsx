@@ -1,6 +1,4 @@
 import { Box, Link, Typography } from "@mui/material";
-// import Slides from "../../component/Slides";
-// import { topNews } from "../../data/MockData";
 import { useEffect, useState } from "react";
 
 type NewsItem = {

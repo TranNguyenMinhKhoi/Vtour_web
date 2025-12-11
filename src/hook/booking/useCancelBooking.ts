@@ -10,7 +10,6 @@ export const useCancelBooking = () => {
       return bookingAPI.cancelBooking(cancelBookingDto);
     },
     onSuccess: (data) => {
-      // Invalidate and refetch bookings if you have a bookings list query
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
       
       console.log("✅ Booking cancelled successfully:", data);
@@ -18,7 +17,6 @@ export const useCancelBooking = () => {
     onError: (error: any) => {
       console.error("❌ Cancel booking error:", error);
       
-      // You can handle specific error messages here
       const errorMessage = error?.response?.data?.message || error?.message || "Failed to cancel booking";
       console.error("Error message:", errorMessage);
     },

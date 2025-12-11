@@ -35,7 +35,7 @@ const Slides = <T,>({
 
   const handleScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const gap = 16; // khớp với sx gap: 2 -> 8px * 2 = 16px
+      const gap = 16;
       const amount = itemWidth + gap;
       scrollRef.current.scrollBy({
         left: direction === "left" ? -amount : amount,
@@ -45,7 +45,6 @@ const Slides = <T,>({
   };
 
   const defaultRender = (item: any) => {
-    // fallback render: hiển thị ảnh, tên, view hoặc percent nếu có
     return (
       <>
         <CardMedia

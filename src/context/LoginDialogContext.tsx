@@ -20,7 +20,7 @@ export const useLoginDialog = () => {
 
 export const LoginDialogProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [open, setOpen] = useState(false);
-  const [skipRedirect, setSkipRedirect] = useState(false); // ⭐ Flag skip redirect
+  const [skipRedirect, setSkipRedirect] = useState(false); 
 
   const openLoginDialog = (options?: { skipRedirect?: boolean }) => {
     setSkipRedirect(options?.skipRedirect || false);
@@ -29,7 +29,7 @@ export const LoginDialogProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const closeLoginDialog = () => {
     setOpen(false);
-    setSkipRedirect(false); // Reset về false
+    setSkipRedirect(false);
   };
 
   return (
@@ -37,7 +37,7 @@ export const LoginDialogProvider: React.FC<{ children: ReactNode }> = ({ childre
       value={{ 
         openLoginDialog, 
         closeLoginDialog,
-        isInBookingFlow: skipRedirect // ⭐ Expose flag này
+        isInBookingFlow: skipRedirect
       }}
     >
       {children}

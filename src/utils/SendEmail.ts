@@ -1,6 +1,5 @@
-// src/utils/sendOtp.ts
 export async function sendOtp(email: string) {
-  const otp = Math.floor(100000 + Math.random() * 900000); // Random 6 số
+  const otp = Math.floor(100000 + Math.random() * 900000);
 
   try {
     const response = await fetch("https://api.resend.com/emails", {
@@ -10,7 +9,7 @@ export async function sendOtp(email: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "trannguyenminhkhoi8384@gmail.com", // phải là email đã verify trong Resend
+        from: "trannguyenminhkhoi8384@gmail.com", 
         to: email,
         subject: "Mã OTP xác thực",
         html: `<p>Mã OTP của bạn là: <b>${otp}</b></p>`,
@@ -20,7 +19,7 @@ export async function sendOtp(email: string) {
     const data = await response.json();
     console.log("Kết quả gửi mail:", data);
 
-    return otp; // trả OTP để lưu tạm trong FE
+    return otp; 
   } catch (error) {
     console.error("Lỗi gửi OTP:", error);
     return null;

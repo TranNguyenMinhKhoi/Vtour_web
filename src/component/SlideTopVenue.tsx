@@ -72,7 +72,6 @@ const SlideTopVenue: React.FC = () => {
         }
       });
       
-      // Chuyển thành mảng và sắp xếp theo số lượng tuyến
       const uniqueDestinations = Array.from(destinationMap.values())
         .sort((a, b) => b.routeCount - a.routeCount);
       
@@ -86,7 +85,7 @@ const SlideTopVenue: React.FC = () => {
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const gap = 16; // gap: 2 trong MUI = 8px * 2 = 16px
+      const gap = 16;
       const amount = itemWidth + gap;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -amount : amount,

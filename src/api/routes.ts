@@ -2,7 +2,7 @@ import axiosClient from "../utils/axiosClient";
 
 
 export const routeAPI = {
-  // Lấy tất cả route để bạn extract arrivalStation
+  // Lấy tất cả route
   getAllRoutes() {
     return axiosClient
       .get("/api/routes", {
@@ -13,7 +13,7 @@ export const routeAPI = {
       .then((res) => res.data);
   },
 
-  // Option: lấy route theo id (nếu cần)
+  // Lấy route theo id
   getRouteById(routeId: string) {
     return axiosClient
       .get(`/api/routes/${routeId}`, {
@@ -24,7 +24,7 @@ export const routeAPI = {
       .then((res) => res.data);
   },
 
-  // Option: tạo route mới (nếu cần dùng về sau)
+  // Tạo route
   createRoute(data: any) {
     return axiosClient
       .post("/api/routes", data, {

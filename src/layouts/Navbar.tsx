@@ -11,24 +11,11 @@ import {
 import { NavLink } from "react-router-dom";
 import {useLoginInfo} from "../hook/auth/useLoginInfo";
 
-/**
- * Navbar có phân quyền hiển thị menu Admin
- *
- * Quy tắc:
- * - admin: thấy nút Admin + tất cả adminSubMenu
- * - bus-manager: thấy nút Admin nhưng chỉ thấy "Quản lý nhà xe"
- * - passenger / not logged in: không thấy nút Admin
- *
- * Lưu ý: hook useLoginInfo() trả về cấu trúc giống BE: { user: { ... } } (theo BE auth.js)
- * => role được lấy bằng user?.user?.role
- */
-
 const Navbar = ({ scrolled }: { scrolled: boolean }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // Lấy thông tin đăng nhập (bao gồm role) từ React Query hook
+  // Lấy thông tin đăng nhập (bao gồm role)
   const { data: loginInfo, isLoading } = useLoginInfo();
-  // loginInfo có thể là null (chưa đăng nhập) hoặc object { user: { ... } }
   const role = loginInfo?.user?.role ?? null;
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,7 +35,7 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
     { label: "Vì sao? Vì-bus", path: "/us" },
   ];
 
-  // Tất cả submenu admin (chứa các đường dẫn quản trị)
+  // Tất cả submenu admin
   const adminSubMenu = [
     { label: "Quản lý người dùng", path: "/AdminAccount", key: "manage-users" },
     { label: "Quản lý nhà xe", path: "/AdminBusCompany", key: "manage-bus" },
@@ -56,7 +43,6 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
     { label: "Quản lý lịch trình", path: "/AdminSchedule", key: "manage-schedule" },
   ];
 
-  // Tính toán submenu hiển thị dựa trên role
   const visibleAdminSubmenu = useMemo(() => {
     if (!role) return [];
     if (role === "admin") {
@@ -66,11 +52,9 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
       // bus-manager chỉ thấy "Quản lý nhà xe"
       return adminSubMenu.filter((s) => s.key === "manage-bus");
     }
-    // passenger hoặc role khác không thấy submenu
     return [];
   }, [role]);
 
-  // Hiển thị loading nhỏ ở chỗ tương ứng nếu đang load loginInfo
   const adminButtonContent = isLoading ? (
     <Box sx={{ width: 36, display: "flex", justifyContent: "center" }}>
       <CircularProgress size={18} color="inherit" />
@@ -121,12 +105,7 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
             </Button>
           ))}
 
-          {/* Nút Admin — chỉ render nếu user role phù hợp (admin hoặc bus-manager) */}
-          {/*
-            Điều kiện hiển thị:
-            - nếu đang load info (isLoading) — vẫn show Admin button với spinner
-            - nếu role === 'admin' || role === 'bus-manager' -> hiển thị Admin button
-          */}
+          {/* Nút Admin — chỉ render nếu user role phù hợp (admin) */}
           {(isLoading || role === "admin" || role === "bus_manager") && (
             <>
               <Button
@@ -164,7 +143,6 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
                   horizontal: "left",
                 }}
               >
-                {/* Nếu đang loading, show một mục disabled */}
                 {isLoading && (
                   <MenuItem disabled>
                     <CircularProgress size={16} />
@@ -172,12 +150,10 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
                   </MenuItem>
                 )}
 
-                {/* Nếu không có submenu (ví dụ passenger), show thông báo ngắn */}
                 {!isLoading && visibleAdminSubmenu.length === 0 && (
                   <MenuItem disabled>Không có mục quản trị</MenuItem>
                 )}
 
-                {/* Render submenu phù hợp */}
                 {!isLoading &&
                   visibleAdminSubmenu.map((sub) => (
                     <MenuItem

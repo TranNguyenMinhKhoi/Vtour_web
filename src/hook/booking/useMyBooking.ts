@@ -5,8 +5,8 @@ export const useMyBookings = (enabled: boolean = true) => {
   return useQuery({
     queryKey: ["my-bookings"],
     queryFn: () => bookingAPI.getMyBookings(),
-    enabled, // Chỉ fetch khi user đã login
-    staleTime: 5 * 60 * 1000, // Cache 5 phút
+    enabled,
+    staleTime: 5 * 60 * 1000,
     retry: 1,
   });
 };

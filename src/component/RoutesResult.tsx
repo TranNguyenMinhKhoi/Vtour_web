@@ -93,7 +93,6 @@ const RoutesResults: React.FC<Props> = ({
           const departureTimeISO = s.departureTime || s.departureAt || s.startTime;
           const arrivalTimeISO = s.arrivalTime || s.endTime;
 
-          // formatted strings for display (the ones used in TicketCardForm)
           const startTime = formatTime(departureTimeISO);
           const endTime = formatTime(arrivalTimeISO);
 
@@ -178,7 +177,6 @@ const RoutesResults: React.FC<Props> = ({
                     ) : seatError[scheduleId] ? (
                       <Box sx={{ color: "error.main" }}>{seatError[scheduleId]}</Box>
                     ) : seatMaps[scheduleId] ? (
-                      // NOTE: pass BOTH the formatted display times AND the raw ISO times.
                       <SeatMap
                         seatMap={seatMaps[scheduleId]}
                         passengers={passengers}
@@ -190,7 +188,7 @@ const RoutesResults: React.FC<Props> = ({
                         arrivalTime={arrivalTimeISO}
                         departureTimeDisplay={startTime}
                         arrivalTimeDisplay={endTime}
-                        price={price} // <-- truyền price xuống SeatMap để hiển thị/tính tổng
+                        price={price}
                       />
                     ) : (
                       <Box>Không có dữ liệu sơ đồ ghế cho chuyến này.</Box>

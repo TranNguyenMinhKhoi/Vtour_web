@@ -102,16 +102,15 @@ const BusLayout: React.FC<BusLayoutProps> = ({
       return !Number.isNaN(n) && n >= start && n <= end;
     });
 
-  // Tầng dưới (1–22)
+  // Tầng dưới (1–24)
   const bottomRow1 = getSeatsByRange(1, 8);
   const bottomRow2 = getSeatsByRange(9, 16);
   const bottomRow3 = getSeatsByRange(17, 24);
 
-  // Tầng trên (23–45)
+  // Tầng trên (25–48)
   const topRow1 = getSeatsByRange(25, 32);
   const topRow2 = getSeatsByRange(33, 40);
   const topRow3 = getSeatsByRange(41, 48);
-  // const topRow3 = getSeatsByRange(39, 46);
 
 
   return (

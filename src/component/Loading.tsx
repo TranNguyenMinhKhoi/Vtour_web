@@ -1,4 +1,3 @@
-// src/components/GlobalLoader.tsx
 import { Box, CircularProgress } from "@mui/material";
 
 const Loading: React.FC = () => {

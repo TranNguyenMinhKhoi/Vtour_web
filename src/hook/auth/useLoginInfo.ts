@@ -12,8 +12,7 @@ export const useLoginInfo = (options?: UseLoginInfoOptions) => {
     queryFn: async () => {
       try {
         const token = localStorage.getItem("token");
-        
-        // Nếu không có token, trả về null
+    
         if (!token) {
           return null;
         }
@@ -22,7 +21,6 @@ export const useLoginInfo = (options?: UseLoginInfoOptions) => {
         // console.log("++++++++++++++++++++", res);
         return res.data as UserDto;
       } catch (error: any) {
-        // Nếu lỗi 401, xóa token và trả về null
         if (error?.response?.status === 401) {
           localStorage.removeItem("token");
           return null;
@@ -32,14 +30,13 @@ export const useLoginInfo = (options?: UseLoginInfoOptions) => {
     },
     enabled: options?.enabled ?? true,
     retry: (failureCount, error: any) => {
-      // Không retry nếu lỗi 401
       if (error?.response?.status === 401) {
         return false;
       }
       return failureCount < 3;
     },
-    staleTime: 5 * 60 * 1000, // 5 phút
-    gcTime: 10 * 60 * 1000, // 10 phút (thay cacheTime)
+    staleTime: 5 * 60 * 1000, 
+    gcTime: 10 * 60 * 1000, 
     refetchOnWindowFocus: true,
     refetchOnMount: true,
   });
