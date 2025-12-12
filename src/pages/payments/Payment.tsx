@@ -22,12 +22,12 @@ import type { BookingData } from "../../component/booking/types";
 import axios from "axios";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CloseIcon from "@mui/icons-material/Close";
+import { v4 as uuidv4 } from "uuid";
 
 dayjs.extend(utc);
 
 // const API_BASE = "http://localhost:5000";
 const API_BASE = "https://bus-ticket-be-dun.vercel.app";
-
 
 const formatTime = (isoOrFormatted?: string) => {
   if (!isoOrFormatted) return "—";
@@ -65,24 +65,34 @@ const Payment: React.FC = () => {
 
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [paymentId, setPaymentId] = useState<string | null>(null);
-  
+
   // QR Code states
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [showQR, setShowQR] = useState<boolean>(false);
   const [qrLoading, setQrLoading] = useState<boolean>(false);
   const [bankInfo, setBankInfo] = useState<any>(null);
   const [instructions, setInstructions] = useState<string[]>([]);
-  
+
   // Voucher states
   const [voucherCode, setVoucherCode] = useState<string>("");
-  const [appliedVoucher, setAppliedVoucher] = useState<VoucherData | null>(null);
+  const [appliedVoucher, setAppliedVoucher] = useState<VoucherData | null>(
+    null
+  );
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [applyingVoucher, setApplyingVoucher] = useState<boolean>(false);
   const [voucherError, setVoucherError] = useState<string | null>(null);
-  
+
   // Confirmation states
   const [confirmingPayment, setConfirmingPayment] = useState<boolean>(false);
   const [openSuccessDialog, setOpenSuccessDialog] = useState<boolean>(false);
+
+  //===========================================================
+  //SeatLock
+  //===========================================================
+  const [sessionId] = useState<string>(() => uuidv4());
+  const [lockExpiresAt, setLockExpiresAt] = useState<Date | null>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const [lockExpired, setLockExpired] = useState<boolean>(false);
 
   useEffect(() => {
     if (!bookingData) {
@@ -117,9 +127,10 @@ const Payment: React.FC = () => {
     : String(selectedSeats);
 
   // Parse totalPrice
-  const parsedTotalPrice = typeof totalPrice === "string" 
-    ? parseFloat(totalPrice.replace(/[^\d]/g, "")) 
-    : totalPrice || 0;
+  const parsedTotalPrice =
+    typeof totalPrice === "string"
+      ? parseFloat(totalPrice.replace(/[^\d]/g, ""))
+      : totalPrice || 0;
 
   // Calculate final amount
   const finalAmount = parsedTotalPrice - discountAmount;
@@ -141,8 +152,8 @@ const Payment: React.FC = () => {
         {
           code: voucherCode.trim().toUpperCase(),
           bookingAmount: parsedTotalPrice,
-          routeId: null, 
-          companyId: null, 
+          routeId: null,
+          companyId: null,
         },
         {
           headers: {
@@ -183,6 +194,12 @@ const Payment: React.FC = () => {
       return;
     }
 
+    if (lockExpired) {
+      alert("Thời gian giữ chỗ đã hết. Vui lòng đặt lại.");
+      navigate(-1);
+      return;
+    }
+
     if (!scheduleId || !departureStationId || !arrivalStationId) {
       alert("Thiếu thông tin chuyến đi. Vui lòng thử lại.");
       return;
@@ -208,8 +225,9 @@ const Payment: React.FC = () => {
             phone,
           },
           paymentMethod,
-          voucherCode: appliedVoucher?.code || null, 
-          discountAmount: discountAmount, 
+          sessionId, // ✅ THÊM sessionId
+          voucherCode: appliedVoucher?.code || null,
+          discountAmount: discountAmount,
         },
         {
           headers: {
@@ -286,6 +304,118 @@ const Payment: React.FC = () => {
     window.location.href = "/booking";
   };
 
+  //=====================================================
+  //SeatLock
+  //=====================================================
+  useEffect(() => {
+    const lockSeatsOnLoad = async () => {
+      if (!scheduleId || !selectedSeats || selectedSeats.length === 0) {
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `${API_BASE}/api/seat-locks/lock`,
+          {
+            scheduleId,
+            seatNumbers: selectedSeats.map((seat) => String(seat)),
+            sessionId,
+            durationMinutes: 15,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          const lock = response.data.lock;
+          setLockExpiresAt(new Date(lock.expiresAt));
+          setRemainingSeconds(lock.remainingSeconds);
+          console.log("🔒 Seats locked successfully:", lock.seatNumbers);
+        }
+      } catch (error: any) {
+        console.error("❌ Failed to lock seats:", error);
+        if (error?.response?.data?.errorType === "SEAT_CONFLICT") {
+          alert(error.response.data.message);
+          navigate(-1); // Quay lại trang trước
+        }
+      }
+    };
+
+    lockSeatsOnLoad();
+  }, [scheduleId, selectedSeats, sessionId, navigate]);
+
+  useEffect(() => {
+    if (!lockExpiresAt) return;
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const remaining = Math.max(
+        0,
+        Math.floor((lockExpiresAt.getTime() - now.getTime()) / 1000)
+      );
+      setRemainingSeconds(remaining);
+
+      if (remaining === 0) {
+        setLockExpired(true);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [lockExpiresAt]);
+
+  // format thời gian
+  const formatCountdown = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // Thêm hàm gia hạn lock
+  const handleExtendLock = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${API_BASE}/api/seat-locks/extend`,
+        {
+          sessionId,
+          additionalMinutes: 5,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const lock = response.data.lock;
+        setLockExpiresAt(new Date(lock.expiresAt));
+        setRemainingSeconds(lock.remainingSeconds);
+        setLockExpired(false);
+        alert("✅ Đã gia hạn thêm 5 phút");
+      }
+    } catch (error: any) {
+      console.error("❌ Failed to extend lock:", error);
+      alert(error?.response?.data?.message || "Không thể gia hạn");
+    }
+  };
+
+  // Cleanup khi out
+  useEffect(() => {
+    return () => {
+      if (!openSuccessDialog) {
+        axios
+          .post(`${API_BASE}/api/seat-locks/release`, { sessionId })
+          .catch((err) => console.error("Failed to release locks:", err));
+      }
+    };
+  }, [sessionId, openSuccessDialog]);
+
   return (
     <Box
       sx={{
@@ -303,6 +433,55 @@ const Payment: React.FC = () => {
           {/* Left Side - Payment Methods */}
           <Box sx={{ flex: "0 0 40%" }}>
             <Paper sx={{ p: 3, borderRadius: 2 }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  mb: 2,
+                  bgcolor: lockExpired ? "#ffebee" : "#fff3e0",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight={700}
+                      sx={{ mb: 0.5 }}
+                    >
+                      ⏱️ Thời gian giữ chỗ
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {lockExpired
+                        ? "Đã hết hạn - Vui lòng đặt lại"
+                        : `Còn lại: ${formatCountdown(remainingSeconds)}`}
+                    </Typography>
+                  </Box>
+                  {!lockExpired &&
+                    remainingSeconds < 300 && (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={handleExtendLock}
+                        disabled={showQR}
+                        sx={{ minWidth: 100 }}
+                      >
+                        Gia hạn +5 phút
+                      </Button>
+                    )}
+                </Box>
+                {lockExpired && (
+                  <Alert severity="error" sx={{ mt: 2 }}>
+                    Ghế của bạn đã được giải phóng. Vui lòng quay lại và chọn
+                    lại ghế.
+                  </Alert>
+                )}
+              </Paper>
               <Typography variant="h6" fontWeight={700} sx={{ mb: 2 }}>
                 Phương thức thanh toán
               </Typography>
@@ -392,26 +571,29 @@ const Payment: React.FC = () => {
               </Box>
 
               {/* Generate QR Button */}
+
               <Button
                 fullWidth
                 variant="outlined"
                 size="large"
                 onClick={handleGenerateQR}
-                disabled={!paymentMethod || qrLoading || showQR}
+                disabled={!paymentMethod || qrLoading || showQR || lockExpired} 
                 sx={{
                   mt: 3,
                   fontWeight: 600,
                   py: 1.5,
-                  borderColor: "primary.main",
-                  color: "primary.main",
+                  borderColor: lockExpired ? "error.main" : "primary.main",
+                  color: lockExpired ? "error.main" : "primary.main",
                   "&:hover": {
-                    borderColor: "primary.dark",
-                    bgcolor: "primary.light",
+                    borderColor: lockExpired ? "error.dark" : "primary.dark",
+                    bgcolor: lockExpired ? "error.light" : "primary.light",
                   },
                 }}
               >
                 {qrLoading ? (
                   <CircularProgress size={24} />
+                ) : lockExpired ? (
+                  "⚠️ ĐÃ HẾT THỜI GIAN"
                 ) : showQR ? (
                   "Mã QR đã được tạo"
                 ) : (
@@ -491,11 +673,7 @@ const Payment: React.FC = () => {
                         📋 Hướng dẫn:
                       </Typography>
                       {instructions.map((instruction, idx) => (
-                        <Typography
-                          key={idx}
-                          variant="body2"
-                          sx={{ mb: 0.5 }}
-                        >
+                        <Typography key={idx} variant="body2" sx={{ mb: 0.5 }}>
                           {instruction}
                         </Typography>
                       ))}
@@ -522,10 +700,7 @@ const Payment: React.FC = () => {
                       <Box
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
                       >
-                        <CircularProgress
-                          size={20}
-                          sx={{ color: "white" }}
-                        />
+                        <CircularProgress size={20} sx={{ color: "white" }} />
                         <span>Đang xác nhận...</span>
                       </Box>
                     ) : (
@@ -746,7 +921,9 @@ const Payment: React.FC = () => {
                     size="small"
                     placeholder="Nhập mã giảm giá"
                     value={voucherCode}
-                    onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                    onChange={(e) =>
+                      setVoucherCode(e.target.value.toUpperCase())
+                    }
                     disabled={applyingVoucher || showQR}
                     error={!!voucherError}
                     helperText={voucherError}
@@ -837,7 +1014,11 @@ const Payment: React.FC = () => {
                   }}
                 >
                   <Typography color="success.main">Giảm giá</Typography>
-                  <Typography variant="body1" fontWeight={600} color="success.main">
+                  <Typography
+                    variant="body1"
+                    fontWeight={600}
+                    color="success.main"
+                  >
                     - {discountAmount.toLocaleString("vi-VN")} đ
                   </Typography>
                 </Box>
