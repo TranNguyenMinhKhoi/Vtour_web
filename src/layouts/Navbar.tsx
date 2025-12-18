@@ -41,6 +41,7 @@ const Navbar = ({ scrolled }: { scrolled: boolean }) => {
     { label: "Quản lý nhà xe", path: "/AdminBusCompany", key: "manage-bus" },
     { label: "Quản lý tuyến đường", path: "/AdminRoute", key: "manage-route" },
     { label: "Quản lý lịch trình", path: "/AdminSchedule", key: "manage-schedule" },
+    { label: "Quản lý voucher", path: "/AdminVoucher", key: "manage-voucher" },
   ];
 
   const visibleAdminSubmenu = useMemo(() => {

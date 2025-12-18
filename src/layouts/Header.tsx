@@ -26,7 +26,7 @@ type HeaderProps = {
 };
 
 const menuItems = [
-  { label: "Hủy vé", path: "/cancellation" },
+  // { label: "Hủy vé", path: "/cancellation" },
   { label: "Đặt chỗ của tôi", path: "/booking" },
   // { label: "Giỏ hàng", path: "/cart", icon: <ShoppingCartIcon /> },
 ];

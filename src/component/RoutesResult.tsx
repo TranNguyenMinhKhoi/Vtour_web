@@ -81,13 +81,14 @@ const RoutesResults: React.FC<Props> = ({
             company?.logoUrl ||
             company?.logo ||
             company?.logoUrlThumb ||
+            company?.logoURL ||
             "/placeholder-logo.png";
 
           const companyName =
-            company?.name ||
+            // company?.name ||
             company?.companyName ||
-            bus?.companyName ||
-            bus?.operatorName ||
+            // bus?.companyName ||
+            // bus?.operatorName ||
             "Nhà xe";
 
           const departureTimeISO = s.departureTime || s.departureAt || s.startTime;
@@ -113,11 +114,11 @@ const RoutesResults: React.FC<Props> = ({
               ? "—"
               : new Intl.NumberFormat("vi-VN").format(Number(rawPrice));
 
-          const vehicleImage =
-            bus?.image ||
-            bus?.vehicleImage ||
-            (bus?.photos && bus.photos.length ? bus.photos[0] : null) ||
-            "/placeholder-bus.png";
+          // const vehicleImage =
+          //   bus?.image ||
+          //   bus?.vehicleImage ||
+          //   (bus?.photos && bus.photos.length ? bus.photos[0] : null) ||
+          //   "/placeholder-bus.png";
 
           const key =
             s._id ?? (route && route._id ? `${route._id}_${departureTimeISO}` : `sched_${idx}`);
@@ -155,7 +156,7 @@ const RoutesResults: React.FC<Props> = ({
                       }
                       price={price}
                       rating={Number(company?.rating ?? 0)}
-                      vehicleImage={vehicleImage}
+                      // vehicleImage={vehicleImage}
                       features={bus?.features || bus?.amenities || []}
                       cancelable={s.cancelable ?? s.isCancelable ?? false}
                       onBook={() => (onBook ? onBook(s) : console.log("Book", s))}

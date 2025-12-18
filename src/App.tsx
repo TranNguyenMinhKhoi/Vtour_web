@@ -24,6 +24,7 @@ import {LoginDialogProvider} from './context/LoginDialogContext'
 import Vouchers from './pages/Vouchers/Vouchers'
 import AdminSchedule from './pages/AdminSchedule/AdminSchedule'
 import MainAdminRoute from './pages/AdminRoute/MainAdminRoute'
+import AdminVoucher from './pages/AdminVoucher/AdminVoucher'
 
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
         <Route path="/payments" element={<MainLayout><Payment/></MainLayout>} />
         <Route path="/us" element={<MainLayout><Us/></MainLayout>} />
         <Route path="/AdminSchedule" element={<MainLayout><AdminSchedule/></MainLayout>} />
+        <Route path="/AdminVoucher" element={<MainLayout><AdminVoucher/></MainLayout>} />
       </Routes>
       </LoginDialogProvider>
     </GlobalLoadingProvider>

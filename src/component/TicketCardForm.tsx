@@ -17,7 +17,7 @@ interface TicketCardFormProps {
   endStation: string;
   price: string;
   rating: number;
-  vehicleImage: string;
+  // vehicleImage: string;
   features?: string[];
   cancelable?: boolean;
   onBook?: () => void;
@@ -35,7 +35,7 @@ const TicketCardForm: React.FC<TicketCardFormProps> = ({
   endStation,
   price,
   rating,
-  vehicleImage,
+  // vehicleImage,
   cancelable = false,
   scheduleId,
   busId,
@@ -101,11 +101,11 @@ const TicketCardForm: React.FC<TicketCardFormProps> = ({
       </Box>
 
       <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
-        <img
+        {/* <img
           src={vehicleImage}
           alt="bus"
           style={{ width: 120, height: 80, borderRadius: 8 }}
-        />
+        /> */}
 
         <Box sx={{ flexGrow: 1 }}>
           <Box sx={{ display: "flex", flexDirection: "row", gap: 10 }}>

@@ -180,11 +180,11 @@ const EnableBooking = () => {
     );
   }
 
-  // Handler mở dialog confirm
-  const handleOpenCancel = (booking: any) => {
-    setSelectedBooking(booking);
-    setOpenConfirm(true);
-  };
+  // Handler mở dialog confirm hủy vé
+  // const handleOpenCancel = (booking: any) => {
+  //   setSelectedBooking(booking);
+  //   setOpenConfirm(true);
+  // };
 
   // Handler đóng dialog
   const handleCloseCancel = () => {
@@ -250,12 +250,12 @@ const EnableBooking = () => {
     }
   };
 
-  const canCancel = (booking: any) => {
-    return (
-      booking.bookingStatus === "reserved" ||
-      booking.bookingStatus === "confirmed"
-    );
-  };
+  // const canCancel = (booking: any) => {
+  //   return (
+  //     booking.bookingStatus === "reserved" ||
+  //     booking.bookingStatus === "confirmed"
+  //   );
+  // };
 
   const formatTime = (iso?: string) =>
     iso ? dayjs.utc(iso).format("HH:mm") : "—";
@@ -349,7 +349,7 @@ const EnableBooking = () => {
                     </Typography>
 
                     {/* Nút Hủy vé - chỉ hiện nếu có thể hủy */}
-                    {canCancel(booking) ? (
+                    {/* {canCancel(booking) ? (
                       <Button
                         size="small"
                         variant="outlined"
@@ -370,7 +370,7 @@ const EnableBooking = () => {
                           ? "Đã hủy"
                           : "Không thể hủy"}
                       </Button>
-                    )}
+                    )} */}
                   </Box>
                 </CardContent>
               </Card>

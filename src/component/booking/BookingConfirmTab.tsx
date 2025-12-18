@@ -18,8 +18,8 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import type { BookingData } from "./types";
-import { useLoginInfo } from "../../hook/auth/useLoginInfo"; 
-import { useLoginDialog } from "../../context/LoginDialogContext"; 
+import { useLoginInfo } from "../../hook/auth/useLoginInfo";
+import { useLoginDialog } from "../../context/LoginDialogContext";
 
 dayjs.extend(utc);
 
@@ -50,15 +50,15 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
   onChange,
 }) => {
   const navigate = useNavigate();
-  
+
   // Check login status
   const token = localStorage.getItem("token");
   const hasToken = Boolean(token);
   const { data: loginData } = useLoginInfo({ enabled: hasToken });
   const isLoggedIn = Boolean(loginData && hasToken);
-  
+
   const { openLoginDialog } = useLoginDialog();
-  
+
   const {
     departureCity,
     arrivalCity,
@@ -83,6 +83,7 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
   const [passengerNames, setPassengerNames] = useState<string[]>([]);
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
   const [pendingPaymentData, setPendingPaymentData] = useState<any>(null);
 
   useEffect(() => {
@@ -125,6 +126,27 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
     });
   };
 
+  // const validateBeforeSubmit = () => {
+  //   if (seatNumbers.length === 0) {
+  //     alert("Không có ghế để đặt.");
+  //     return false;
+  //   }
+  //   for (let i = 0; i < seatNumbers.length; i++) {
+  //     if (!passengerNames[i] || passengerNames[i].trim() === "") {
+  //       alert(
+  //         `Vui lòng nhập họ tên cho hành khách ${i + 1} (ghế ${
+  //           seatNumbers[i]
+  //         }).`
+  //       );
+  //       return false;
+  //     }
+  //   }
+  //   if (!email || email.trim() === "") {
+  //     alert("Vui lòng nhập email liên hệ để nhận vé.");
+  //     return false;
+  //   }
+  //   return true;
+  // };
   const validateBeforeSubmit = () => {
     if (seatNumbers.length === 0) {
       alert("Không có ghế để đặt.");
@@ -141,10 +163,34 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
       }
     }
     if (!email || email.trim() === "") {
-      alert("Vui lòng nhập email liên hệ để nhận vé.");
+      setEmailError("Vui lòng nhập email liên hệ để nhận vé.");
       return false;
     }
+
+    const emailLower = email.trim().toLowerCase();
+    if (!emailLower.endsWith("@gmail.com")) {
+      setEmailError("Email phải có đuôi @gmail.com");
+      return false;
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@gmail\.com$/;
+    if (!emailRegex.test(emailLower)) {
+      setEmailError(
+        "Email không hợp lệ. Vui lòng nhập đúng định dạng: example@gmail.com"
+      );
+      return false;
+    }
+
+    setEmailError("");
     return true;
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (emailError) {
+      setEmailError("");
+    }
   };
 
   const handleProceedToPayment = () => {
@@ -180,7 +226,7 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
   // Handler mở login dialog
   const handleOpenLogin = () => {
     setOpenLoginWarning(false);
-    openLoginDialog({ skipRedirect: true }); 
+    openLoginDialog({ skipRedirect: true });
   };
 
   return (
@@ -413,13 +459,24 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                 Vé của bạn sẽ được gửi đến
               </Typography>
-              <TextField
+              {/* <TextField
                 fullWidth
                 size="small"
                 label="Địa chỉ email"
                 placeholder="email@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                sx={{ mb: 1 }}
+              /> */}
+              <TextField
+                fullWidth
+                size="small"
+                label="Địa chỉ email *"
+                placeholder="example@gmail.com"
+                value={email}
+                onChange={(e) => handleEmailChange(e.target.value)}
+                error={!!emailError} 
+                helperText={emailError || "Chỉ chấp nhận email @gmail.com"}
                 sx={{ mb: 1 }}
               />
               <TextField
@@ -478,14 +535,18 @@ const BookingConfirmTab: React.FC<BookingConfirmTabProps> = ({
         <DialogTitle>Yêu cầu đăng nhập</DialogTitle>
         <DialogContent>
           <Typography variant="body1">
-            Hãy tiến hành <strong>Đăng nhập/Đăng ký</strong> để tiếp tục thao tác!
+            Hãy tiến hành <strong>Đăng nhập/Đăng ký</strong> để tiếp tục thao
+            tác!
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
             💡 Thông tin đặt vé của bạn sẽ được lưu lại
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseLoginWarning} sx={{ textTransform: "none" }}>
+          <Button
+            onClick={handleCloseLoginWarning}
+            sx={{ textTransform: "none" }}
+          >
             Hủy
           </Button>
           <Button
