@@ -518,7 +518,7 @@ const AdminVoucher: React.FC = () => {
           component="div"
           count={total}
           page={page}
-          onPageChange={(e, newPage) => setPage(newPage)}
+          onPageChange={(_e, newPage) => setPage(newPage)}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={(e) => {
             setRowsPerPage(parseInt(e.target.value, 10));
