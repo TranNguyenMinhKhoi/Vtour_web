@@ -41,7 +41,7 @@ const Tickets = () => {
           endStation="Bến Xe Ngã Tư Ga"
           price="1.012.000"
           rating={2.3}
-          vehicleImage="/emptycart.png"
+          // vehicleImage="/emptycart.png"
           cancelable
           onBook={() => alert("Đặt vé thành công!")}
         />
